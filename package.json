@@ -1,0 +1,18 @@
+{
+  "name": "expennies",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  },
+  "devDependencies": {
+    "@popperjs/core": "^2.11.6",
+    "@symfony/webpack-encore": "^4.0.0",
+    "bootstrap": "^5.2.1",
+    "file-loader": "^6.2.0",
+    "sass": "^1.54.9",
+    "sass-loader": "^13.0.2",
+    "webpack-notifier": "^1.15.0"
+  }
+}

@@ -1,7 +1,13 @@
 {% extends 'layout.twig' %}
 
 {% block stylesheets %}
-    <link href="css/dashboard.css" rel="stylesheet" />
+    {{ parent() }}
+    {{ encore_entry_link_tags('dashboard') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('dashboard') }}
 {% endblock %}
 
 {% block title %}Dashboard{% endblock %}

@@ -1,0 +1,22 @@
+@import "~bootstrap/scss/bootstrap";
+
+* {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+body {
+  background-color: #e7ebee;
+}
+
+.nav-link {
+  color: #9aa0a9;
+
+  &.active {
+    background-color: inherit !important;
+    color: #57585A !important;
+  }
+
+  &:hover, &:focus {
+    color: #57585A !important;
+  }
+}
