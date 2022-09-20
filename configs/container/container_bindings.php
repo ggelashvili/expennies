@@ -47,6 +47,7 @@ return [
         new Package(new JsonManifestVersionStrategy(BUILD_PATH . '/manifest.json'))
     ),
     'webpack_encore.tag_renderer' => fn(ContainerInterface $container) => new TagRenderer(
-        new EntrypointLookup(BUILD_PATH . '/entrypoints.json'), $container->get('webpack_encore.packages')
+        new EntrypointLookup(BUILD_PATH . '/entrypoints.json'),
+        $container->get('webpack_encore.packages')
     ),
 ];
