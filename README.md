@@ -9,3 +9,10 @@ Here are some examples:
 * If you are watching lesson **P1** and want to code along, then use the branch **P1_Start**
 * If you are watching lesson **P3** and just want to see the end result of that lesson, then use the branch **P3_End**
 * If you just want to see the up-to-date source code of the project as we build it or the final project code once we've finished building it then stick to the **main** branch
+
+### Tips
+* Make sure to run `composer install` & `npm install` after you pull the latest changes or switch to a new branch so that you are always using the same versions of dependencies that I do during the lessons
+* Run `npm run dev` if you want to build assets for development
+* Run `npm run build` if you want to build assets for productions
+* Run `npm run watch` if you want to build assets during development & have it automatically be watched so that it rebuilds after you make updates to front-end
+* Run `docker-compose up -d --build` to rebuild docker containers if you are using docker to make sure you are using the same versions as the videos
