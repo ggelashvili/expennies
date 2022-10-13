@@ -14,8 +14,11 @@ services:
     working_dir: /var/www/
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    ports:
+      - "9003:9003"
     volumes:
       - ../:/var/www
+      - ./local.ini:/usr/local/etc/php/conf.d/local.ini
   nginx:
     image: nginx:1.19-alpine
     container_name: expennies-nginx

@@ -1,0 +1,45 @@
+{% extends 'auth/layout.twig' %}
+
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+    <section class="vh-100 bg-primary bg-gradient">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-light text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-4">
+                                <h2 class="fw-bold mb-5 text-uppercase text-primary d-flex justify-content-center align-items-center">
+                                    <img src="{{ asset('build/images/logo.png') }}" width="64" height="64"
+                                         alt="Expennies Logo" />
+                                    Login
+                                </h2>
+                                <form method="post" action="/login">
+                                    <div class="form-outline form-white mb-4">
+                                        <input type="email" class="form-control form-control-lg" placeholder="Email"
+                                               required />
+                                    </div>
+                                    <div class="form-outline form-white mb-1">
+                                        <input type="password" class="form-control form-control-lg"
+                                               placeholder="Password" required />
+                                    </div>
+                                    <p class="mb-4 text-end"><a class="text-secondary fw-semibold" href="#">Forgot
+                                            password?</a></p>
+                                    <button class="btn btn-primary bg-gradient text-white btn-lg px-5" type="submit">Log
+                                        In
+                                    </button>
+                                </form>
+                            </div>
+                            <div>
+                                <p class="mb-0 text-dark">Don't have an account?
+                                    <a href="/register" class="text-primary fw-bold">Sign Up</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

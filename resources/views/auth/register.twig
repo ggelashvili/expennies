@@ -1,0 +1,56 @@
+{% extends 'auth/layout.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <section class="vh-100 bg-primary bg-gradient">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-light text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+                            <div class="mb-4">
+                                <h2 class="fw-bold mb-5 text-uppercase text-primary d-flex justify-content-center align-items-center">
+                                    <img src="{{ asset('build/images/logo.png') }}" width="64" height="64"
+                                         alt="Expennies Logo" />
+                                    Register
+                                </h2>
+                                <form method="post" action="/register">
+                                    <div class="form-outline form-white mb-4">
+                                        <input type="text" name="name" required
+                                               class="form-control form-control-lg"
+                                               placeholder="Name" />
+                                    </div>
+                                    <div class="form-outline form-white mb-4">
+                                        <input type="email" name="email" required
+                                               value="{{ old.email }}"
+                                               class="form-control form-control-lg"
+                                               placeholder="Email" />
+                                    </div>
+                                    <div class="form-outline form-white mb-4">
+                                        <input type="password" name="password" required
+                                               class="form-control form-control-lg"
+                                               placeholder="Password" />
+                                    </div>
+                                    <div class="form-outline form-white mb-5">
+                                        <input type="password" name="confirmPassword" required
+                                               class="form-control form-control-lg"
+                                               placeholder="Confirm Password" />
+                                    </div>
+                                    <button class="btn btn-primary bg-gradient text-white btn-lg px-5" type="submit">
+                                        Register
+                                    </button>
+                                </form>
+                            </div>
+                            <div>
+                                <p class="mb-0 text-dark">Have an account?
+                                    <a href="/login" class="text-primary fw-bold">Sign In</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
