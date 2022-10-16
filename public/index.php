@@ -2,9 +2,8 @@
 
 declare(strict_types = 1);
 
-$app    = require __DIR__ . '/../bootstrap.php';
-$router = require CONFIG_PATH . '/routes/web.php';
+use Slim\App;
 
-$router($app);
+$container = require __DIR__ . '/../bootstrap.php';
 
-$app->run();
+$container->get(App::class)->run();

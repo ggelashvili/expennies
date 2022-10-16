@@ -28,7 +28,8 @@
         "symfony/webpack-encore-bundle": "^1.15",
         "twig/intl-extra": "^3.4",
         "twig/twig": "^3.4",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+        "vlucas/valitron": "^1.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
