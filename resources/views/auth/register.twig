@@ -18,23 +18,39 @@
                                 <form method="post" action="/register">
                                     <div class="form-outline form-white mb-4">
                                         <input type="text" name="name"
-                                               class="form-control form-control-lg"
+                                               value="{{ old.name }}"
+                                               class="form-control form-control-lg {{ errors.name ? 'is-invalid' : '' }}"
                                                placeholder="Name" />
+                                        <div class="invalid-feedback">
+                                            {{ errors.name | first }}
+                                        </div>
                                     </div>
                                     <div class="form-outline form-white mb-4">
                                         <input type="email" name="email"
-                                               class="form-control form-control-lg"
+                                               value="{{ old.email }}"
+                                               class="form-control form-control-lg {{ errors.email ? 'is-invalid' : '' }}"
                                                placeholder="Email" />
+                                        <div class="invalid-feedback">
+                                            {{ errors.email | first }}
+                                        </div>
                                     </div>
                                     <div class="form-outline form-white mb-4">
                                         <input type="password" name="password"
-                                               class="form-control form-control-lg"
+                                               value="{{ old.password }}"
+                                               class="form-control form-control-lg {{ errors.password ? 'is-invalid' : '' }}"
                                                placeholder="Password" />
+                                        <div class="invalid-feedback">
+                                            {{ errors.password | first }}
+                                        </div>
                                     </div>
                                     <div class="form-outline form-white mb-5">
                                         <input type="password" name="confirmPassword"
-                                               class="form-control form-control-lg"
+                                               value="{{ old.confirmPassword }}"
+                                               class="form-control form-control-lg {{ errors.confirmPassword ? 'is-invalid' : '' }}"
                                                placeholder="Confirm Password" />
+                                        <div class="invalid-feedback">
+                                            {{ errors.confirmPassword | first }}
+                                        </div>
                                     </div>
                                     <button class="btn btn-primary bg-gradient text-white btn-lg px-5" type="submit">
                                         Register
