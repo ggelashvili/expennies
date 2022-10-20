@@ -59,4 +59,18 @@ class AuthController
 
         return $response;
     }
+
+    public function logIn(Request $request, Response $response): Response
+    {
+        // TODO
+
+        return $response->withHeader('Location', '/')->withStatus(302);
+    }
+
+    public function logOut(Request $request, Response $response): Response
+    {
+        // TODO
+
+        return $response->withHeader('Location', '/')->withStatus(302);
+    }
 }

@@ -13,4 +13,5 @@ return function (App $app) {
     $app->get('/register', [AuthController::class, 'registerView']);
     $app->post('/login', [AuthController::class, 'logIn']);
     $app->post('/register', [AuthController::class, 'register']);
+    $app->post('/logout', [AuthController::class, 'logOut']);
 };

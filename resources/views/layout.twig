@@ -5,7 +5,8 @@
         <title>{% block title %}Expennies{% endblock %}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
+              rel="stylesheet">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -16,17 +17,41 @@
     </head>
     <body>
         <div class="container">
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
+            <header class="d-flex flex-wrap justify-content-center align-items-center py-3 mb-4">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
                     <img src="{{ asset('build/images/logo.png') }}" width="64" height="64" alt="Expennies Logo" />
                     <span class="fs-1 fw-bold">Ex<span class="text-primary">pennies</span></span>
                 </a>
 
                 <ul class="nav nav-pills align-items-center">
-                    <li class="nav-item"><a href="#" class="nav-link fw-bold fs-5 active" aria-current="page">Overview</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link fw-bold fs-5" aria-current="page">Transactions</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link fw-bold fs-5" aria-current="page">Categories</a></li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link fw-bold fs-5 active" aria-current="page">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link fw-bold fs-5" aria-current="page">Transactions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link fw-bold fs-5" aria-current="page">Categories</a>
+                    </li>
                 </ul>
+
+                <div class="dropdown user-dropdown-menu">
+                    <a href="#" class="h5 text-decoration-none" id="userDropDownMenu" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                             stroke="currentColor" class="icon">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropDownMenu">
+                        <li>
+                            <form action="/logout" method="post">
+                                <button class="dropdown-item" href="#">Log Out</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </header>
         </div>
         <div class="container">
