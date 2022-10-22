@@ -36,6 +36,7 @@
                                     </div>
                                     <div class="form-outline form-white mb-4">
                                         <input type="password" name="password"
+                                               class="form-control form-control-lg {{ errors.password ? 'is-invalid' : '' }}"
                                                placeholder="Password" />
                                         <div class="invalid-feedback">
                                             {{ errors.password | first }}

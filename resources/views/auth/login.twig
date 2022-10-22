@@ -17,12 +17,20 @@
                                 </h2>
                                 <form method="post" action="/login">
                                     <div class="form-outline form-white mb-4">
-                                        <input type="email" class="form-control form-control-lg" placeholder="Email"
+                                        <input type="email" name="email" class="form-control form-control-lg {{ errors.email ? 'is-invalid' : '' }}"
+                                               value="{{ old.email }}"
+                                               placeholder="Email"
                                                required />
+                                        <div class="invalid-feedback">
+                                            {{ errors.email | first }}
+                                        </div>
                                     </div>
                                     <div class="form-outline form-white mb-1">
-                                        <input type="password" class="form-control form-control-lg"
+                                        <input type="password" name="password" class="form-control form-control-lg {{ errors.password ? 'is-invalid' : '' }}"
                                                placeholder="Password" required />
+                                        <div class="invalid-feedback">
+                                            {{ errors.password | first }}
+                                        </div>
                                     </div>
                                     <p class="mb-4 text-end"><a class="text-secondary fw-semibold" href="#">Forgot
                                             password?</a></p>
