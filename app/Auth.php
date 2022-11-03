@@ -15,8 +15,8 @@ class Auth implements AuthInterface
 
     public function __construct(
         private readonly UserProviderServiceInterface $userProvider,
-        private readonly SessionInterface $session)
-    {
+        private readonly SessionInterface $session
+    ) {
     }
 
     public function user(): ?UserInterface
