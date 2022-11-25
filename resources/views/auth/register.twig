@@ -16,6 +16,8 @@
                                     Register
                                 </h2>
                                 <form method="post" action="/register">
+                                    {{ csrf.fields | raw }}
+
                                     <div class="form-outline form-white mb-4">
                                         <input type="text" name="name" required
                                                value="{{ old.name }}"
