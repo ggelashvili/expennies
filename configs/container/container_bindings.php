@@ -62,6 +62,7 @@ return [
         $twig = Twig::create(VIEW_PATH, [
             'cache'       => STORAGE_PATH . '/cache/templates',
             'auto_reload' => AppEnvironment::isDevelopment($config->get('app_environment')),
+            'autoescape'  => false,
         ]);
 
         $twig->addExtension(new IntlExtension());
@@ -99,5 +100,7 @@ return [
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(
         RequestValidatorFactory::class
     ),
-    'csrf' => fn(ResponseFactoryInterface $responseFactory) => new Guard($responseFactory, persistentTokenMode: true),
+    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory) => new Guard(
+        $responseFactory, persistentTokenMode: true
+    ),
 ];
