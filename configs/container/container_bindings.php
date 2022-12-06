@@ -62,7 +62,6 @@ return [
         $twig = Twig::create(VIEW_PATH, [
             'cache'       => STORAGE_PATH . '/cache/templates',
             'auto_reload' => AppEnvironment::isDevelopment($config->get('app_environment')),
-            'autoescape'  => false,
         ]);
 
         $twig->addExtension(new IntlExtension());
