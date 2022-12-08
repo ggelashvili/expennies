@@ -10,6 +10,8 @@
     "@popperjs/core": "^2.11.6",
     "@symfony/webpack-encore": "^4.0.0",
     "bootstrap": "^5.2.1",
+    "bootstrap-icons": "^1.10.2",
+    "core-js": "^3.26.1",
     "file-loader": "^6.2.0",
     "sass": "^1.54.9",
     "sass-loader": "^13.0.2",

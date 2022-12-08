@@ -1,0 +1,87 @@
+{% extends 'layout.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('categories') }}
+{% endblock %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+    <div class="categories container content-body">
+        <div class="text-end">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCategoryModal">
+                <i class="bi bi-plus-circle me-1"></i>
+                New Category
+            </button>
+        </div>
+        <div class="modal fade" id="newCategoryModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="/categories" method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">New Category</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ csrf.fields | raw }}
+                            <div class="form-outline form-white mb-4">
+                                <input type="text" name="name" required
+                                       class="form-control form-control-lg"
+                                       placeholder="Category Name" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle me-1"></i>
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Create
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% if categories %}
+            <div id="categoriesTable">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for category in categories %}
+                            <tr>
+                                <td>{{ category.name }}</td>
+                                <td>{{ category.createdAt }}</td>
+                                <td>{{ category.updatedAt }}</td>
+                                <td>
+                                    <div class="d-flex flex-">
+                                        <form action="/categories/{{ category.id }}" method="post">
+                                            {{ csrf.fields | raw }}
+                                            <input type="hidden" name="_METHOD" value="DELETE" />
+                                            <button type="submit" class="btn btn-outline-primary">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </form>
+                                        <button class="ms-2 btn btn-outline-primary edit-category-btn"
+                                                data-id="{{ category.id }}">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
