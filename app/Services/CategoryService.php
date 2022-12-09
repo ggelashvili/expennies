@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace App\Services;
 
@@ -17,16 +16,14 @@ class CategoryService
 
     public function create(string $name, User $user): Category
     {
-         $category = new Category();
+        $category = new Category();
 
-         $category->setName($name);
-         $category->setUser($user);
+        $category->setName($name);
+        $category->setUser($user);
 
-         $this->entityManager->persist($user);
-         $this->entityManager->flush();
+        $this->entityManager->flush();
 
-         return $category;
-
+        return $category;
     }
 
     public function getAll(): array
