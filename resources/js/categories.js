@@ -7,8 +7,9 @@ window.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function (event) {
             const categoryId = event.currentTarget.getAttribute('data-id')
 
-            // TODO: Fetch category info from controller & pass it to this function
-            openEditCategoryModal(editCategoryModal, {id: categoryId, name: ''})
+            fetch(`/categories/${categoryId}`)
+                .then(response => response.json())
+                .then(response => openEditCategoryModal(editCategoryModal, response))
         })
     })
 
