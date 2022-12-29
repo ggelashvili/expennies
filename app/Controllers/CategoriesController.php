@@ -68,17 +68,17 @@ class CategoriesController
     public function update(Request $request, Response $response, array $args): Response
     {
         $data = $this->requestValidatorFactory->make(UpdateCategoryRequestValidator::class)->validate(
-            $request->getParsedBody()
+            $args + $request->getParsedBody()
         );
 
-        $category = $this->categoryService->getById((int) $args['id']);
+        $category = $this->categoryService->getById((int) $data['id']);
 
         if (! $category) {
             return $response->withStatus(404);
         }
 
-        $data = ['status' => 'ok'];
+        $this->categoryService->update($category, $data['name']);
 
-        return $this->responseFormatter->asJson($response, $data);
+        return $response;
     }
 }
