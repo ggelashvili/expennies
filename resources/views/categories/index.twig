@@ -9,7 +9,7 @@
 
 {% block content %}
     <div class="categories container content-body">
-        <div class="text-end">
+        <div class="text-end mb-4">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newCategoryModal">
                 <i class="bi bi-plus-circle me-1"></i>
                 New Category
@@ -46,40 +46,18 @@
             </div>
         </div>
         {% include 'categories/edit_category_modal.twig' %}
-        {% if categories %}
-            <div id="categoriesTable">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for category in categories %}
-                            <tr>
-                                <td>{{ category.name }}</td>
-                                <td>{{ category.createdAt | date('m/d/Y g:i A') }}</td>
-                                <td>{{ category.updatedAt | date('m/d/Y g:i A') }}</td>
-                                <td>
-                                    <div class="d-flex flex-">
-                                        <button class="ms-2 btn btn-outline-primary delete-category-btn"
-                                                data-id="{{ category.id }}">
-                                            <i class="bi bi-trash3-fill"></i>
-                                        </button>
-                                        <button class="ms-2 btn btn-outline-primary edit-category-btn"
-                                                data-id="{{ category.id }}">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        {% endif %}
+        <div>
+            <table id="categoriesTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
