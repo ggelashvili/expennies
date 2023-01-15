@@ -79,7 +79,7 @@ class CategoriesController
 
     public function load(Request $request, Response $response): Response
     {
-        $data = $request->getQueryParams();
+        $params = $request->getQueryParams();
 
         $categories = array_map(function (Category $category) {
             return [
@@ -94,7 +94,7 @@ class CategoriesController
             $response,
             [
                 'data'            => $categories,
-                'draw'            => (int) $data['draw'],
+                'draw'            => (int) $params['draw'],
                 'recordsTotal'    => count($categories),
                 'recordsFiltered' => count($categories),
             ]
