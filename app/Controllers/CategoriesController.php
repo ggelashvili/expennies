@@ -81,22 +81,26 @@ class CategoriesController
     {
         $params = $request->getQueryParams();
 
-        $categories = array_map(function (Category $category) {
+        $categories = $this->categoryService->getPaginatedCategories((int) $params['start'], (int) $params['length']);
+
+        $transformer = function (Category $category) {
             return [
                 'id'        => $category->getId(),
                 'name'      => $category->getName(),
                 'createdAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
                 'updatedAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
             ];
-        }, $this->categoryService->getAll());
+        };
+
+        $totalCategories = count($categories);
 
         return $this->responseFormatter->asJson(
             $response,
             [
-                'data'            => $categories,
+                'data'            => array_map($transformer, (array) $categories->getIterator()),
                 'draw'            => (int) $params['draw'],
-                'recordsTotal'    => count($categories),
-                'recordsFiltered' => count($categories),
+                'recordsTotal'    => $totalCategories,
+                'recordsFiltered' => $totalCategories,
             ]
         );
     }
