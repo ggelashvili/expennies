@@ -10,6 +10,7 @@ use App\RequestValidators\CreateCategoryRequestValidator;
 use App\RequestValidators\UpdateCategoryRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
+use App\Services\RequestService;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
@@ -20,7 +21,8 @@ class CategoriesController
         private readonly Twig $twig,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly CategoryService $categoryService,
-        private readonly ResponseFormatter $responseFormatter
+        private readonly ResponseFormatter $responseFormatter,
+        private readonly RequestService $requestService
     ) {
     }
 
@@ -79,10 +81,8 @@ class CategoriesController
 
     public function load(Request $request, Response $response): Response
     {
-        $params = $request->getQueryParams();
-
-        $categories = $this->categoryService->getPaginatedCategories((int) $params['start'], (int) $params['length']);
-
+        $params      = $this->requestService->getDataTableQueryParameters($request);
+        $categories  = $this->categoryService->getPaginatedCategories($params);
         $transformer = function (Category $category) {
             return [
                 'id'        => $category->getId(),
@@ -94,14 +94,11 @@ class CategoriesController
 
         $totalCategories = count($categories);
 
-        return $this->responseFormatter->asJson(
+        return $this->responseFormatter->asDataTable(
             $response,
-            [
-                'data'            => array_map($transformer, (array) $categories->getIterator()),
-                'draw'            => (int) $params['draw'],
-                'recordsTotal'    => $totalCategories,
-                'recordsFiltered' => $totalCategories,
-            ]
+            array_map($transformer, (array) $categories->getIterator()),
+            $params->draw,
+            $totalCategories
         );
     }
 }
