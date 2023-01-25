@@ -87,16 +87,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): \DateTime
-    {
-        return $this->updatedAt;
-    }
-
     public function getCategories(): ArrayCollection|Collection
     {
         return $this->categories;

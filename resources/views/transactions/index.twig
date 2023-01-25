@@ -1,0 +1,35 @@
+{% extends 'layout.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('transactions') }}
+{% endblock %}
+
+{% block title %}Transactions{% endblock %}
+
+{% block content %}
+    <div class="categories container content-body">
+        <div class="text-end mb-4">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTransactionModal">
+                <i class="bi bi-plus-circle me-1"></i>
+                New Transaction
+            </button>
+        </div>
+        {% include 'transactions/transaction_modal.twig' with {modal: {title: 'Create Transaction', id: 'newTransactionModal', isEdit: false}} %}
+        {% include 'transactions/transaction_modal.twig' with {modal: {title: 'Edit Transaction', id: 'editTransactionModal', isEdit: true}} %}
+        <div>
+            <table id="transactionsTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
