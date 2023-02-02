@@ -31,10 +31,11 @@ class TransactionService
         $query = $this->entityManager
             ->getRepository(Transaction::class)
             ->createQueryBuilder('t')
+            ->leftJoin('t.category', 'c')
             ->setFirstResult($params->start)
             ->setMaxResults($params->length);
 
-        $orderBy  = in_array($params->orderBy, ['description', 'amount', 'date'])
+        $orderBy  = in_array($params->orderBy, ['description', 'amount', 'date', 'category'])
             ? $params->orderBy
             : 'date';
         $orderDir = strtolower($params->orderDir) === 'asc' ? 'asc' : 'desc';
@@ -44,7 +45,11 @@ class TransactionService
                   ->setParameter('description', '%' . addcslashes($params->searchTerm, '%_') . '%');
         }
 
-        $query->orderBy('t.' . $orderBy, $orderDir);
+        if ($orderBy === 'category') {
+            $query->orderBy('c.name', $orderDir);
+        } else {
+            $query->orderBy('t.' . $orderBy, $orderDir);
+        }
 
         return new Paginator($query);
     }
