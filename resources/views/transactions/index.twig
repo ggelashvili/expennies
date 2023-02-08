@@ -17,6 +17,7 @@
         </div>
         {% include 'transactions/transaction_modal.twig' with {modal: {title: 'Create Transaction', id: 'newTransactionModal', isEdit: false}} %}
         {% include 'transactions/transaction_modal.twig' with {modal: {title: 'Edit Transaction', id: 'editTransactionModal', isEdit: true}} %}
+        {% include 'transactions/upload_receipt_modal.twig' %}
         <div>
             <table id="transactionsTable">
                 <thead>
