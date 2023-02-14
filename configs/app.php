@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use App\Enum\AppEnvironment;
+use App\Enum\StorageDriver;
 
 $appEnv       = $_ENV['APP_ENV'] ?? AppEnvironment::Production->value;
 $appSnakeName = strtolower(str_replace(' ', '_', $_ENV['APP_NAME']));
@@ -34,4 +35,7 @@ return [
         'httponly'   => true,
         'samesite'   => 'lax',
     ],
+    'storage' => [
+        'driver' => StorageDriver::Local,
+    ]
 ];

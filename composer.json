@@ -18,6 +18,8 @@
         "doctrine/dbal": "^3.4",
         "doctrine/migrations": "^3.5",
         "doctrine/orm": "^2.13",
+        "league/flysystem": "^3.0",
+        "league/mime-type-detection": "^1.11",
         "php-di/php-di": "^6.4",
         "slim/csrf": "^1.3",
         "slim/psr7": "^1.5",
