@@ -39,7 +39,7 @@ class ReceiptController
 
         $randomFilename = bin2hex(random_bytes(25));
 
-        $this->filesystem->writeStream('receipts/' . $randomFilename, $file->getStream()->getContents());
+        $this->filesystem->write('receipts/' . $randomFilename, $file->getStream()->getContents());
 
         $this->receiptService->create($transaction, $filename, $randomFilename);
 
