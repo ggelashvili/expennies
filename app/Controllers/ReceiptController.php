@@ -45,4 +45,18 @@ class ReceiptController
 
         return $response;
     }
+
+    public function download(Request $request, Response $response, array $args): Response
+    {
+        // TODO
+
+        return $response;
+    }
+
+    public function delete(Request $request, Response $response, array $args): Response
+    {
+        // TODO
+
+        return $response;
+    }
 }

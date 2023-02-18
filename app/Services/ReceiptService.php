@@ -27,4 +27,9 @@ class ReceiptService
 
         return $receipt;
     }
+
+    public function getById(int $id)
+    {
+        return $this->entityManager->find(Receipt::class, $id);
+    }
 }

@@ -1,5 +1,10 @@
 {% extends 'layout.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('transactions') }}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('transactions') }}
@@ -25,6 +30,7 @@
                         <th>Description</th>
                         <th>Amount</th>
                         <th>Category</th>
+                        <th>Receipt(s)</th>
                         <th>Date</th>
                         <th>Actions</th>
                     </tr>

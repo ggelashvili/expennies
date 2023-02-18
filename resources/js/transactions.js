@@ -2,6 +2,8 @@ import { Modal }          from "bootstrap"
 import { get, post, del } from "./ajax"
 import DataTable          from "datatables.net"
 
+import "../css/transactions.scss"
+
 window.addEventListener('DOMContentLoaded', function () {
     const newTransactionModal  = new Modal(document.getElementById('newTransactionModal'))
     const editTransactionModal = new Modal(document.getElementById('editTransactionModal'))
@@ -24,6 +26,41 @@ window.addEventListener('DOMContentLoaded', function () {
                 ).format(row.amount)
             },
             {data: "category"},
+            {
+                data: row => {
+                    let icons = []
+
+                    for (let i = 0; i < row.receipts.length; i++) {
+                        const receipt = row.receipts[i]
+
+                        const span       = document.createElement('span')
+                        const anchor     = document.createElement('a')
+                        const icon       = document.createElement('i')
+                        const deleteIcon = document.createElement('i')
+
+                        deleteIcon.role = 'button'
+
+                        span.classList.add('position-relative')
+                        icon.classList.add('bi', 'bi-file-earmark-text', 'download-receipt', 'text-primary', 'fs-4')
+                        deleteIcon.classList.add('bi', 'bi-x-circle-fill', 'delete-receipt', 'text-danger', 'position-absolute')
+
+                        anchor.href   = `/transactions/${ row.id }/receipts/${ receipt.id }`
+                        anchor.target = 'blank'
+                        anchor.title  = receipt.name
+
+                        deleteIcon.setAttribute('data-id', receipt.id)
+                        deleteIcon.setAttribute('data-transactionId', row.id)
+
+                        anchor.append(icon)
+                        span.append(anchor)
+                        span.append(deleteIcon)
+
+                        icons.push(span.outerHTML)
+                    }
+
+                    return icons.join('')
+                }
+            },
             {data: "date"},
             {
                 sortable: false,
@@ -42,12 +79,13 @@ window.addEventListener('DOMContentLoaded', function () {
                 `
             }
         ]
-    });
+    })
 
     document.querySelector('#transactionsTable').addEventListener('click', function (event) {
         const editBtn          = event.target.closest('.edit-transaction-btn')
         const deleteBtn        = event.target.closest('.delete-transaction-btn')
         const uploadReceiptBtn = event.target.closest('.open-receipt-upload-btn')
+        const deleteReceiptBtn = event.target.closest('.delete-receipt')
 
         if (editBtn) {
             const transactionId = editBtn.getAttribute('data-id')
@@ -73,6 +111,17 @@ window.addEventListener('DOMContentLoaded', function () {
                               .setAttribute('data-id', transactionId)
 
             uploadReceiptModal.show()
+        } else if (deleteReceiptBtn) {
+            const receiptId     = deleteReceiptBtn.getAttribute('data-id')
+            const transactionId = deleteReceiptBtn.getAttribute('data-transactionid')
+
+            if (confirm('Are you sure you want to delete this receipt?')) {
+                del(`/transactions/${ transactionId }/receipts/${ receiptId }`).then(response => {
+                    if (response.ok) {
+                        table.draw()
+                    }
+                })
+            }
         }
     })
 
@@ -101,11 +150,11 @@ window.addEventListener('DOMContentLoaded', function () {
 
     document.querySelector('.upload-receipt-btn').addEventListener('click', function (event) {
         const transactionId = event.currentTarget.getAttribute('data-id')
-        const formData      = new FormData();
-        const files         = uploadReceiptModal._element.querySelector('input[type="file"]').files;
+        const formData      = new FormData()
+        const files         = uploadReceiptModal._element.querySelector('input[type="file"]').files
 
         for (let i = 0; i < files.length; i++) {
-            formData.append('receipt', files[i]);
+            formData.append('receipt', files[i])
         }
 
         post(`/transactions/${ transactionId }/receipts`, formData, uploadReceiptModal._element)
