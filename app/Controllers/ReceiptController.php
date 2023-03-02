@@ -74,7 +74,24 @@ class ReceiptController
 
     public function delete(Request $request, Response $response, array $args): Response
     {
-        // TODO
+        $transactionId = (int) $args['transactionId'];
+        $receiptId     = (int) $args['id'];
+
+        if (! $transactionId || ! $this->transactionService->getById($transactionId)) {
+            return $response->withStatus(404);
+        }
+
+        if (! $receiptId || ! ($receipt = $this->receiptService->getById($receiptId))) {
+            return $response->withStatus(404);
+        }
+
+        if ($receipt->getTransaction()->getId() !== $transactionId) {
+            return $response->withStatus(401);
+        }
+
+        $this->filesystem->delete('receipts/' . $receipt->getStorageFilename());
+
+        $this->receiptService->delete($receipt);
 
         return $response;
     }

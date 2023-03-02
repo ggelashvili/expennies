@@ -37,7 +37,10 @@ class CategoryService
         $orderDir = strtolower($params->orderDir) === 'asc' ? 'asc' : 'desc';
 
         if (! empty($params->searchTerm)) {
-            $query->where('c.name LIKE :name')->setParameter('name', '%' . addcslashes($params->searchTerm, '%_') . '%');
+            $query->where('c.name LIKE :name')->setParameter(
+                'name',
+                '%' . addcslashes($params->searchTerm, '%_') . '%'
+            );
         }
 
         $query->orderBy('c.' . $orderBy, $orderDir);
@@ -70,9 +73,15 @@ class CategoryService
 
     public function getCategoryNames(): array
     {
-        return $this->entityManager->getRepository(Category::class)->createQueryBuilder('c')
+        return $this->entityManager
+            ->getRepository(Category::class)->createQueryBuilder('c')
             ->select('c.id', 'c.name')
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function findByName(string $name): ?Category
+    {
+        return $this->entityManager->getRepository(Category::class)->findBy(['name' => $name])[0] ?? null;
     }
 }
