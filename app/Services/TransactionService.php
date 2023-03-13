@@ -31,7 +31,9 @@ class TransactionService
         $query = $this->entityManager
             ->getRepository(Transaction::class)
             ->createQueryBuilder('t')
+            ->select('t', 'c', 'r')
             ->leftJoin('t.category', 'c')
+            ->leftJoin('t.receipts', 'r')
             ->setFirstResult($params->start)
             ->setMaxResults($params->length);
 

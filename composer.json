@@ -18,6 +18,7 @@
         "doctrine/dbal": "^3.4",
         "doctrine/migrations": "^3.5",
         "doctrine/orm": "^2.13",
+        "itsgoingd/clockwork": "^5.1",
         "league/flysystem": "^3.0",
         "league/mime-type-detection": "^1.11",
         "php-di/php-di": "^6.4",
