@@ -10,11 +10,12 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Console\Application;
+use Doctrine\ORM\EntityManagerInterface;
 
 $container = require 'bootstrap.php';
 $config    = $container->get(Config::class);
 
-$entityManager     = $container->get(EntityManager::class);
+$entityManager     = $container->get(EntityManagerInterface::class);
 $dependencyFactory = DependencyFactory::fromEntityManager(
     new PhpFile(CONFIG_PATH . '/migrations.php'),
     new ExistingEntityManager($entityManager)
