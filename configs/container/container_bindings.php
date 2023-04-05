@@ -5,6 +5,7 @@ declare(strict_types = 1);
 use App\Auth;
 use App\Config;
 use App\Contracts\AuthInterface;
+use App\Contracts\EntityManagerServiceInterface;
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\Contracts\SessionInterface;
 use App\Contracts\UserProviderServiceInterface;
@@ -14,6 +15,7 @@ use App\Enum\AppEnvironment;
 use App\Enum\SameSite;
 use App\Enum\StorageDriver;
 use App\RequestValidators\RequestValidatorFactory;
+use App\Services\EntityManagerService;
 use App\Services\UserProviderService;
 use App\Session;
 use Clockwork\DataSource\DoctrineDataSource;
@@ -59,7 +61,7 @@ return [
     Config::class                           => create(Config::class)->constructor(
         require CONFIG_PATH . '/app.php'
     ),
-    EntityManagerInterface::class                    => function (Config $config) {
+    EntityManagerInterface::class           => function (Config $config) {
         $ormConfig = ORMSetup::createAttributeMetadataConfiguration(
             $config->get('doctrine.entity_dir'),
             $config->get('doctrine.dev_mode')
@@ -114,19 +116,22 @@ return [
     'csrf'                                  => fn(ResponseFactoryInterface $responseFactory, Csrf $csrf) => new Guard(
         $responseFactory, failureHandler: $csrf->failureHandler(), persistentTokenMode: true
     ),
-    Filesystem::class => function(Config $config) {
-        $adapter = match($config->get('storage.driver')) {
+    Filesystem::class                       => function (Config $config) {
+        $adapter = match ($config->get('storage.driver')) {
             StorageDriver::Local => new League\Flysystem\Local\LocalFilesystemAdapter(STORAGE_PATH),
         };
 
         return new League\Flysystem\Filesystem($adapter);
     },
-    Clockwork::class => function(EntityManagerInterface $entityManager) {
+    Clockwork::class                        => function (EntityManagerInterface $entityManager) {
         $clockwork = new Clockwork();
 
         $clockwork->storage(new FileStorage(STORAGE_PATH . '/clockwork'));
         $clockwork->addDataSource(new DoctrineDataSource($entityManager));
 
         return $clockwork;
-    }
+    },
+    EntityManagerServiceInterface::class    => fn(EntityManagerInterface $entityManager) => new EntityManagerService(
+        $entityManager
+    ),
 ];
