@@ -15,6 +15,7 @@ use App\Enum\AppEnvironment;
 use App\Enum\SameSite;
 use App\Enum\StorageDriver;
 use App\RequestValidators\RequestValidatorFactory;
+use App\RouteEntityBindingStrategy;
 use App\Services\EntityManagerService;
 use App\Services\UserProviderService;
 use App\Session;
@@ -51,6 +52,13 @@ return [
         $router         = require CONFIG_PATH . '/routes/web.php';
 
         $app = AppFactory::create();
+
+        $app->getRouteCollector()->setDefaultInvocationStrategy(
+            new RouteEntityBindingStrategy(
+                $container->get(EntityManagerServiceInterface::class),
+                $app->getResponseFactory()
+            )
+        );
 
         $router($app);
 
