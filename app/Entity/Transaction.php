@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Contracts\OwnableInterface;
 use App\Entity\Traits\HasTimestamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +20,7 @@ use Doctrine\ORM\Mapping\Table;
 
 #[Entity, Table('transactions')]
 #[HasLifecycleCallbacks]
-class Transaction
+class Transaction implements OwnableInterface
 {
     use HasTimestamps;
 
@@ -44,7 +45,7 @@ class Transaction
     #[ManyToOne(inversedBy: 'transactions')]
     private ?Category $category;
 
-    #[OneToMany(mappedBy: 'transaction', targetEntity: Receipt::class)]
+    #[OneToMany(mappedBy: 'transaction', targetEntity: Receipt::class, cascade: ['remove'])]
     private Collection $receipts;
 
     public function __construct()
