@@ -8,8 +8,10 @@ use App\Controllers\HomeController;
 use App\Controllers\ReceiptController;
 use App\Controllers\TransactionController;
 use App\Controllers\TransactionImporterController;
+use App\Controllers\VerifyController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
+use App\Middleware\VerifyEmailMiddleware;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -45,10 +47,11 @@ return function (App $app) {
             );
             $transactions->post('/{transaction}/review', [TransactionController::class, 'toggleReviewed']);
         });
-    })->add(AuthMiddleware::class);
+    })->add(VerifyEmailMiddleware::class)->add(AuthMiddleware::class);
 
     $app->group('', function(RouteCollectorProxy $group) {
         $group->post('/logout', [AuthController::class, 'logOut']);
+        $group->get('/verify', [VerifyController::class, 'index']);
     })->add(AuthMiddleware::class);
 
     $app->group('', function (RouteCollectorProxy $guest) {

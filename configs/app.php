@@ -35,7 +35,11 @@ return [
         'httponly'   => true,
         'samesite'   => 'lax',
     ],
-    'storage' => [
+    'storage'               => [
         'driver' => StorageDriver::Local,
-    ]
+    ],
+    'mailer'                => [
+        'dsn'  => $_ENV['MAILER_DSN'],
+        'from' => $_ENV['MAILER_FROM'],
+    ],
 ];
