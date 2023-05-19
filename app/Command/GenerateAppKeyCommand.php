@@ -30,7 +30,7 @@ class GenerateAppKeyCommand extends Command
             $helper = $this->getHelper('question');
 
             $question = new ConfirmationQuestion(
-                'Are you sure you want to generate a new APP_KEY? (y/n)',
+                'Generating a new APP_KEY will invalidate any signatures associated with the old key. Are you sure you want to proceed? (y/n)',
                 false
             );
 
