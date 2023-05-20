@@ -27,10 +27,6 @@ class Config
             $value = $value[$key];
         }
 
-        if ($name === 'app_key' && ! $value) {
-            throw new \RuntimeException('Missing Application Key');
-        }
-
         return $value;
     }
 }
