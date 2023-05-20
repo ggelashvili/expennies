@@ -11,12 +11,13 @@ use App\Controllers\TransactionImporterController;
 use App\Controllers\VerifyController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\GuestMiddleware;
+use App\Middleware\ValidateSignatureMiddleware;
 use App\Middleware\VerifyEmailMiddleware;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    $app->group('', function(RouteCollectorProxy $group) {
+    $app->group('', function (RouteCollectorProxy $group) {
         $group->get('/', [HomeController::class, 'index']);
 
         $group->group('/categories', function (RouteCollectorProxy $categories) {
@@ -49,9 +50,12 @@ return function (App $app) {
         });
     })->add(VerifyEmailMiddleware::class)->add(AuthMiddleware::class);
 
-    $app->group('', function(RouteCollectorProxy $group) {
+    $app->group('', function (RouteCollectorProxy $group) {
         $group->post('/logout', [AuthController::class, 'logOut']);
         $group->get('/verify', [VerifyController::class, 'index']);
+        $group->get('/verify/{id}/{hash}', [VerifyController::class, 'verify'])
+              ->setName('verify')
+              ->add(ValidateSignatureMiddleware::class);
     })->add(AuthMiddleware::class);
 
     $app->group('', function (RouteCollectorProxy $guest) {
