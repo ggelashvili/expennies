@@ -2,10 +2,18 @@
 
 {% block title %}Verify Email{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('verify') }}
+{% endblock %}
+
 {% block content %}
     <div class="container content-body">
         <div class="alert alert-warning" role="alert">
             Please check your email to verify & activate your account
         </div>
+        <button class="resend-verify btn btn-primary bg-gradient text-white btn-lg px-2">
+            Resend Verification Email
+        </button>
     </div>
 {% endblock %}

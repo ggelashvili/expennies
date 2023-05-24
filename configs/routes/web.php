@@ -56,6 +56,7 @@ return function (App $app) {
         $group->get('/verify/{id}/{hash}', [VerifyController::class, 'verify'])
               ->setName('verify')
               ->add(ValidateSignatureMiddleware::class);
+        $group->post('/verify', [VerifyController::class, 'resend']);
     })->add(AuthMiddleware::class);
 
     $app->group('', function (RouteCollectorProxy $guest) {
