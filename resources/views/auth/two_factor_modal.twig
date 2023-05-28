@@ -1,0 +1,32 @@
+<div class="modal fade" id="twoFactorAuthModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Two-Factor Authentication</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-outline form-white mb-4">
+                    <p>
+                        Please check your email & enter the authentication code below.
+                    </p>
+                    <div class="form-outline form-white mb-4">
+                        <input type="text" name="code" class="form-control form-control-lg"
+                               placeholder="Code"
+                               required />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>
+                    Close
+                </button>
+                <button type="button" class="btn btn-success log-in-two-factor">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Log In
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

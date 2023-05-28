@@ -64,5 +64,6 @@ return function (App $app) {
         $guest->get('/register', [AuthController::class, 'registerView']);
         $guest->post('/login', [AuthController::class, 'logIn']);
         $guest->post('/register', [AuthController::class, 'register']);
+        $guest->post('/login/two-factor', [AuthController::class, 'twoFactorLogin']);
     })->add(GuestMiddleware::class);
 };

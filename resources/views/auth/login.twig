@@ -15,29 +15,20 @@
                                          alt="Expennies Logo" />
                                     Login
                                 </h2>
-                                <form method="post" action="/login">
-                                    {{ csrf.fields | raw }}
-
+                                <form method="post" action="/login" class="login-form">
                                     <div class="form-outline form-white mb-4">
-                                        <input type="email" name="email" class="form-control form-control-lg {{ errors.email ? 'is-invalid' : '' }}"
-                                               value="{{ old.email }}"
-                                               placeholder="Email"
-                                               required />
-                                        <div class="invalid-feedback">
-                                            {{ errors.email | first }}
-                                        </div>
+                                        <input type="email" name="email" class="form-control form-control-lg"
+                                               placeholder="Email" required />
                                     </div>
                                     <div class="form-outline form-white mb-1">
-                                        <input type="password" name="password" class="form-control form-control-lg {{ errors.password ? 'is-invalid' : '' }}"
+                                        <input type="password" name="password" class="form-control form-control-lg"
                                                placeholder="Password" required />
-                                        <div class="invalid-feedback">
-                                            {{ errors.password | first }}
-                                        </div>
                                     </div>
-                                    <p class="mb-4 text-end"><a class="text-secondary fw-semibold" href="#">Forgot
-                                            password?</a></p>
-                                    <button class="btn btn-primary bg-gradient text-white btn-lg px-5" type="submit">Log
-                                        In
+                                    <p class="mb-4 text-end">
+                                        <a class="text-secondary fw-semibold" href="#">Forgot password?</a>
+                                    </p>
+                                    <button class="btn btn-primary bg-gradient text-white btn-lg px-5 log-in-btn" type="button">
+                                        Log In
                                     </button>
                                 </form>
                             </div>
@@ -51,5 +42,6 @@
                 </div>
             </div>
         </div>
+        {% include 'auth/two_factor_modal.twig' %}
     </section>
 {% endblock %}
