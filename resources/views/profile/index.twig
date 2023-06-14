@@ -1,0 +1,56 @@
+{% extends 'layout.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('profile') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('profile') }}
+{% endblock %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <div class="profile container content-body">
+        <h1>Profile</h1>
+        <form>
+            <div class="row d-flex align-items-center">
+                <div class="col-md-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ profileData.email }}" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ profileData.name }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="form-check">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               id="twoFactor"
+                               value="1"
+                               name="twoFactor" {{ profileData.twoFactor ? 'checked' : '' }}>
+                        <label class="form-check-label" for="twoFactor">Enable 2FA via Email</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 row justify-content-center">
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="button"
+                            class="btn btn-outline-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#updatePasswordModal">
+                        <i class="bi bi-key-fill me-1"></i> Update Password
+                    </button>
+                    <button type="button" class="btn btn-primary save-profile">
+                        <i class="bi bi-check2-circle me-1"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% include 'profile/update_password_modal.twig' %}
+    </div>
+{% endblock %}

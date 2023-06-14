@@ -47,9 +47,12 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="userDropDownMenu">
                         <li>
+                            <a href="/profile" class="dropdown-item">Profile</a>
+                        </li>
+                        <li>
                             <form action="/logout" method="post">
                                 {{ csrf.fields | raw }}
-                                <button class="dropdown-item" href="#">Log Out</button>
+                                <button class="dropdown-item">Log Out</button>
                             </form>
                         </li>
                     </ul>
