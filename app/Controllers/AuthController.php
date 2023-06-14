@@ -10,6 +10,7 @@ use App\DataObjects\RegisterUserData;
 use App\Enum\AuthAttemptStatus;
 use App\Exception\ValidationException;
 use App\RequestValidators\RegisterUserRequestValidator;
+use App\RequestValidators\TwoFactorLoginRequestValidator;
 use App\RequestValidators\UserLoginRequestValidator;
 use App\ResponseFormatter;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -73,5 +74,18 @@ class AuthController
         $this->auth->logOut();
 
         return $response->withHeader('Location', '/')->withStatus(302);
+    }
+
+    public function twoFactorLogin(Request $request, Response $response): Response
+    {
+        $data = $this->requestValidatorFactory->make(TwoFactorLoginRequestValidator::class)->validate(
+            $request->getParsedBody()
+        );
+
+        if (! $this->auth->attemptTwoFactorLogin($data)) {
+            throw new ValidationException(['code' => ['Invalid Code']]);
+        }
+
+        return $response;
     }
 }
