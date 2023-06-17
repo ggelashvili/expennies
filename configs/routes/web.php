@@ -73,6 +73,10 @@ return function (App $app) {
         $guest->post('/register', [AuthController::class, 'register']);
         $guest->post('/login/two-factor', [AuthController::class, 'twoFactorLogin']);
         $guest->get('/forgot-password', [PasswordResetController::class, 'showForgotPasswordForm']);
+        $guest->get('/reset-password/{token}', [PasswordResetController::class, 'showResetPasswordForm'])
+            ->setName('password-reset')
+            ->add(ValidateSignatureMiddleware::class);
         $guest->post('/forgot-password', [PasswordResetController::class, 'handleForgotPasswordRequest']);
+        $guest->post('/reset-password/{token}', [PasswordResetController::class, 'resetPassword']);
     })->add(GuestMiddleware::class);
 };
