@@ -14,8 +14,8 @@ class UpdateProfileRequestValidator implements RequestValidatorInterface
     {
         $v = new Validator($data);
 
-        $v->rule('required', 'name');
-        $v->rule('integer', 'twoFactor');
+        $v->rule('required', 'name')->message('Required field');
+        $v->rule('integer', 'twoFactor')->message('Invalid Two-Factor indicator');
 
         if (! $v->validate()) {
             throw new ValidationException($v->errors());

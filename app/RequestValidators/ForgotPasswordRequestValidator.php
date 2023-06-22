@@ -14,7 +14,7 @@ class ForgotPasswordRequestValidator implements RequestValidatorInterface
     {
         $v = new Validator($data);
 
-        $v->rule('required', ['email']);
+        $v->rule('required', 'email')->message('Required field');
         $v->rule('email', 'email');
 
         if (! $v->validate()) {

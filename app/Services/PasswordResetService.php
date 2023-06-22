@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Services;
 
 use App\Contracts\EntityManagerServiceInterface;
+use App\Contracts\UserProviderServiceInterface;
 use App\Entity\PasswordReset;
 use App\Entity\User;
 
@@ -12,7 +13,7 @@ class PasswordResetService
 {
     public function __construct(
         private readonly EntityManagerServiceInterface $entityManagerService,
-        private readonly HashService $hashService
+        private readonly UserProviderServiceInterface $userProviderService
     ) {
     }
 
@@ -67,9 +68,8 @@ class PasswordResetService
     {
         $this->entityManagerService->wrapInTransaction(function () use ($user, $password) {
             $this->deactivateAllPasswordResets($user->getEmail());
-            $user->setPassword($this->hashService->hashPassword($password));
 
-            $this->entityManagerService->sync($user);
+            $this->userProviderService->updatePassword($user, $password);
         });
     }
 }

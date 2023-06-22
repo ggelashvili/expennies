@@ -14,7 +14,7 @@ class ResetPasswordRequestValidator implements RequestValidatorInterface
     {
         $v = new Validator($data);
 
-        $v->rule('required', ['password', 'confirmPassword']);
+        $v->rule('required', ['password', 'confirmPassword'])->message('Required field');
         $v->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
 
         if (! $v->validate()) {

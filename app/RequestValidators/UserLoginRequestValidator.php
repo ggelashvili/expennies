@@ -14,7 +14,7 @@ class UserLoginRequestValidator implements RequestValidatorInterface
     {
         $v = new Validator($data);
 
-        $v->rule('required', ['email', 'password']);
+        $v->rule('required', ['email', 'password'])->message('Required field');
         $v->rule('email', 'email');
 
         if (! $v->validate()) {

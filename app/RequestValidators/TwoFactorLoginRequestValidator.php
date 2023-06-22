@@ -14,7 +14,7 @@ class TwoFactorLoginRequestValidator implements RequestValidatorInterface
     {
         $v = new Validator($data);
 
-        $v->rule('required', ['email', 'code']);
+        $v->rule('required', ['email', 'code'])->message('Required field');
         $v->rule('email', 'email');
 
         if (! $v->validate()) {

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity, Table('password_resets')]
+#[Entity, Table(name: 'password_resets')]
 #[HasLifecycleCallbacks]
 class PasswordReset
 {
@@ -24,7 +24,7 @@ class PasswordReset
     #[Column]
     private string $email;
 
-    #[Column]
+    #[Column(unique: true)]
     private string $token;
 
     #[Column(name: 'is_active', options: ['default' => true])]
