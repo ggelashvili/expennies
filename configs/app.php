@@ -44,4 +44,9 @@ return [
         'dsn'  => $_ENV['MAILER_DSN'],
         'from' => $_ENV['MAILER_FROM'],
     ],
+    'redis' => [
+        'host'     => $_ENV['REDIS_HOST'],
+        'port'     => $_ENV['REDIS_PORT'],
+        'password' => $_ENV['REDIS_PASSWORD'],
+    ],
 ];
