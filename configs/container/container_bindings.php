@@ -15,6 +15,7 @@ use App\Enum\AppEnvironment;
 use App\Enum\SameSite;
 use App\Enum\StorageDriver;
 use App\Filters\UserFilter;
+use App\RedisCache;
 use App\RequestValidators\RequestValidatorFactory;
 use App\RouteEntityBindingStrategy;
 use App\Services\EntityManagerService;
@@ -29,6 +30,7 @@ use Doctrine\ORM\ORMSetup;
 use League\Flysystem\Filesystem;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\SimpleCache\CacheInterface;
 use Slim\App;
 use Slim\Csrf\Guard;
 use Slim\Factory\AppFactory;
@@ -39,6 +41,8 @@ use Symfony\Bridge\Twig\Mime\BodyRenderer;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
@@ -158,4 +162,15 @@ return [
     },
     BodyRendererInterface::class            => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
     RouteParserInterface::class             => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
+    CacheInterface::class                   => function (Config $config) {
+        $redis  = new \Redis();
+        $config = $config->get('redis');
+
+        $redis->connect($config['host'], (int) $config['port']);
+        $redis->auth($config['password']);
+
+        $adapter = new RedisAdapter($redis);
+
+        return new Psr16Cache($adapter);
+    },
 ];
