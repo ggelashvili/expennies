@@ -52,4 +52,18 @@ class RequestService
             (int) $params['draw']
         );
     }
+
+    public function getClientIp(ServerRequestInterface $request, array $trustedProxies): ?string
+    {
+        $serverParams = $request->getServerParams();
+
+        if (in_array($serverParams['REMOTE_ADDR'], $trustedProxies, true)
+            && isset($serverParams['HTTP_X_FORWARDED_FOR'])) {
+            $ips = explode(',', $serverParams['HTTP_X_FORWARDED_FOR']);
+
+            return trim($ips[0]);
+        }
+
+        return $serverParams['REMOTE_ADDR'] ?? null;
+    }
 }
