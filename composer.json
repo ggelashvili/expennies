@@ -21,6 +21,7 @@
         "doctrine/orm": "^2.13",
         "itsgoingd/clockwork": "^5.1",
         "league/flysystem": "^3.0",
+        "league/flysystem-aws-s3-v3": "^3.0",
         "league/mime-type-detection": "^1.11",
         "php-di/php-di": "^6.4",
         "psr/simple-cache": "^3.0",
