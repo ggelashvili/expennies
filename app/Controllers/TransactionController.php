@@ -76,7 +76,7 @@ class TransactionController
             'description' => $transaction->getDescription(),
             'amount'      => $transaction->getAmount(),
             'date'        => $transaction->getDate()->format('Y-m-d\TH:i'),
-            'category'    => $transaction->getCategory()->getId(),
+            'category'    => $transaction->getCategory()?->getId(),
         ];
 
         return $this->responseFormatter->asJson($response, $data);

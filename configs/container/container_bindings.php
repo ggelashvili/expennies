@@ -15,7 +15,6 @@ use App\Enum\AppEnvironment;
 use App\Enum\SameSite;
 use App\Enum\StorageDriver;
 use App\Filters\UserFilter;
-use App\RedisCache;
 use App\RequestValidators\RequestValidatorFactory;
 use App\RouteEntityBindingStrategy;
 use App\Services\EntityManagerService;
@@ -27,6 +26,9 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
+use DoctrineExtensions\Query\Mysql\DateFormat;
+use DoctrineExtensions\Query\Mysql\Month;
+use DoctrineExtensions\Query\Mysql\Year;
 use League\Flysystem\Filesystem;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -89,6 +91,18 @@ return [
         );
 
         $ormConfig->addFilter('user', UserFilter::class);
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\Year')) {
+            $ormConfig->addCustomDatetimeFunction('YEAR', Year::class);
+        }
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\Month')) {
+            $ormConfig->addCustomDatetimeFunction('MONTH', Month::class);
+        }
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\DateFormat')) {
+            $ormConfig->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
+        }
 
         return new EntityManager(
             DriverManager::getConnection($config->get('doctrine.connection'), $ormConfig),

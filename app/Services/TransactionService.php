@@ -75,4 +75,31 @@ class TransactionService
     {
         $transaction->setReviewed(! $transaction->wasReviewed());
     }
+
+    public function getTotals(\DateTime $startDate, \DateTime $endDate): array
+    {
+        // TODO: Implement
+
+        return ['net' => 800, 'income' => 3000, 'expense' => 2200];
+    }
+
+    public function getRecentTransactions(int $limit): array
+    {
+        // TODO: Implement
+
+        return [];
+    }
+
+    public function getMonthlySummary(int $year): array
+    {
+        // TODO: Implement
+
+        return [
+            ['income' => 1500, 'expense' => 1100, 'm' => '3'],
+            ['income' => 2000, 'expense' => 1800, 'm' => '4'],
+            ['income' => 2500, 'expense' => 1900, 'm' => '5'],
+            ['income' => 2600, 'expense' => 1950, 'm' => '6'],
+            ['income' => 3000, 'expense' => 2200, 'm' => '7'],
+        ];
+    }
 }

@@ -16,6 +16,7 @@
     "require": {
         "ext-pdo": "*",
         "ext-redis": "*",
+        "beberlei/doctrineextensions": "dev-master",
         "doctrine/dbal": "^3.4",
         "doctrine/migrations": "^3.5",
         "doctrine/orm": "^2.13",
