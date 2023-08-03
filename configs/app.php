@@ -6,7 +6,7 @@ use App\Enum\AppEnvironment;
 use App\Enum\StorageDriver;
 
 $boolean = function(mixed $value) {
-    if (in_array($value, ['true', 1, '1', true, 'yes'])) {
+    if (in_array($value, ['true', 1, '1', true, 'yes'], true)) {
         return true;
     }
 
