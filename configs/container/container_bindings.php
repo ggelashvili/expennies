@@ -192,6 +192,10 @@ return [
         $entityManager
     ),
     MailerInterface::class                  => function (Config $config) {
+        if ($config->get('mailer.driver') === 'log') {
+            return new \App\Mailer();
+        }
+
         $transport = Transport::fromDsn($config->get('mailer.dsn'));
 
         return new Mailer($transport);
@@ -204,7 +208,10 @@ return [
         $config = $config->get('redis');
 
         $redis->connect($config['host'], (int) $config['port']);
-        $redis->auth($config['password']);
+
+        if ($config['password']) {
+            $redis->auth($config['password']);
+        }
 
         return new RedisAdapter($redis);
     },
