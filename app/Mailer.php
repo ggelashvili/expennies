@@ -17,6 +17,6 @@ class Mailer implements MailerInterface
         $adapter    = new LocalFilesystemAdapter(STORAGE_PATH . '/mail');
         $filesystem = new Filesystem($adapter);
 
-        $filesystem->write(time() . '_' . uniqid(more_entropy: true) . '.txt', $message->toString());
+        $filesystem->write(time() . '_' . uniqid(more_entropy: true) . '.eml', $message->toString());
     }
 }
