@@ -25,7 +25,13 @@ class ValidateSignatureMiddleware implements MiddlewareInterface
 
         unset($queryParams['signature']);
 
-        $url       = (string) $uri->withQuery(http_build_query($queryParams));
+        $url       = $uri->withQuery(http_build_query($queryParams));
+        $query     = $url->getQuery();
+        $url       = $url->getScheme() . '://'
+            . $url->getHost()
+            . $url->getPath()
+            . ($query !== '' ? '?' . $query : '');
+
         $signature = hash_hmac('sha256', $url, $this->config->get('app_key'));
 
         if ($expiration <= time() || ! hash_equals($signature, $originalSignature)) {
