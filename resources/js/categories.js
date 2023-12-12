@@ -39,7 +39,7 @@ window.addEventListener('DOMContentLoaded', function () {
             get(`/categories/${ categoryId }`)
                 .then(response => response.json())
                 .then(response => openEditCategoryModal(editCategoryModal, response))
-        } else {
+        } else if (deleteBtn) {
             const categoryId = deleteBtn.getAttribute('data-id')
 
             if (confirm('Are you sure you want to delete this category?')) {
