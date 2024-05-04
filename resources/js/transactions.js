@@ -134,6 +134,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 })
             }
         } else if (uploadReceiptBtn) {
+            uploadReceiptModal._element.querySelector('input[type="file"]').value = '';
             const transactionId = uploadReceiptBtn.getAttribute('data-id')
 
             uploadReceiptModal._element
