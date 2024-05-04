@@ -205,6 +205,10 @@ window.addEventListener('DOMContentLoaded', function () {
             })
     })
 
+    document.getElementById('importTransactionsBtn').addEventListener('click', function (event) {
+        importTransactionsModal._element.querySelector('input[type="file"]').value = '';
+    });
+
     document.querySelector('.import-transactions-btn').addEventListener('click', function (event) {
         const formData = new FormData()
         const button   = event.currentTarget
