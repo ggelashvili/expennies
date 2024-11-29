@@ -24,8 +24,9 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
         } catch (ValidationException $e){
             $response = $this->responseFactory->createResponse();
 
-            var_dump($e->errors);
-            return $response->withHeader('Location', '/register')->withStatus(302);
+            $referer = $request->getServerParams()['HTTP_REFERER'] ?? '';
+
+            return $response->withHeader('Location', $referer)->withStatus(302);
         }
     }
 }
