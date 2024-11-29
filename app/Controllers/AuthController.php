@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Controllers;
 
 use App\Entity\User;
+use App\Exception\ValidationException;
 use Doctrine\ORM\EntityManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -34,7 +35,7 @@ class AuthController
         $v = new Validator($_POST);
         $v->rule('required', ['name', 'email','password', 'confirmPassword']);
         $v->rule('email', 'email');
-        $v->rule('equals', 'confirmPassword', 'password');
+        $v->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
 
         $v->rule(function($field, $value, $params, $fields) {
             return $this->entityManager->getRepository(User::class)->count(['email' => $value]);
@@ -43,8 +44,7 @@ class AuthController
         if($v->validate()) {
             echo "Yay! We're all good!";
         } else {
-            // Errors
-            var_dump($v->errors());
+            throw new ValidationException($v->errors());
         }
 
         exit;
