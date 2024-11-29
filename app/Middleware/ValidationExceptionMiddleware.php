@@ -23,6 +23,8 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         } catch (ValidationException $e){
             $response = $this->responseFactory->createResponse();
+
+            var_dump($e->errors);
             return $response->withHeader('Location', '/register')->withStatus(302);
         }
     }

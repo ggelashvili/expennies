@@ -29,8 +29,6 @@ return [
         $addMiddlewares = require CONFIG_PATH . '/middleware.php';
         $router = require CONFIG_PATH . '/routes/web.php';
 
-
-
         $app = AppFactory::create();
 
         $router($app);
@@ -68,5 +66,5 @@ return [
         new EntrypointLookup(BUILD_PATH . '/entrypoints.json'),
         $container->get('webpack_encore.packages')
     ),
-    ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory()
+    ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
 ];
