@@ -38,6 +38,7 @@ class AuthController
         $user->setEmail($data['email']);
         $user->setPassword(password_hash( $data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
 
+        var_dump($user);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
