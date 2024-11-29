@@ -11,8 +11,7 @@ use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Console\Application;
 
-$app       = require 'bootstrap.php';
-$container = $app->getContainer();
+$container = require 'bootstrap.php';
 $config    = $container->get(Config::class);
 
 $entityManager     = $container->get(EntityManager::class);
