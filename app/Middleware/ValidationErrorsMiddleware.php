@@ -23,7 +23,7 @@ class ValidationErrorsMiddleware implements MiddlewareInterface
 
             $this->twig->getEnvironment()->addGlobal('errors', $errors);
 
-            unset($_SESSION['errors']);
+            //unset($_SESSION['errors']);
         }
 
         return $handler->handle($request);

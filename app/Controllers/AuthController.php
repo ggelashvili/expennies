@@ -25,7 +25,6 @@ class AuthController
 
     public function registerView(Request $request, Response $response): Response
     {
-        var_dump($_SESSION);
         return $this->twig->render($response, 'auth/register.twig');
     }
 
@@ -33,8 +32,9 @@ class AuthController
     {
         $data = $request->getParsedBody();
 
-        $v = new Validator($_POST);
-        $v->rule('required', ['name', 'email','password', 'confirmPassword']);
+        $v = new Validator($data);
+
+        $v->rule('required', ['name', 'email', 'password', 'confirmPassword']);
         $v->rule('email', 'email');
         $v->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
         $v->rule(
@@ -44,22 +44,16 @@ class AuthController
             'email'
         )->message('User with the given email address already exists');
 
-        if($v->validate()) {
-            echo "Yay! We're all good!";
-        } else {
+        if (! $v->validate()) {
             throw new ValidationException($v->errors());
         }
 
-
-
         $user = new User();
-
 
         $user->setName($data['name']);
         $user->setEmail($data['email']);
-        $user->setPassword(password_hash( $data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
+        $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
 
-        var_dump($user);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
