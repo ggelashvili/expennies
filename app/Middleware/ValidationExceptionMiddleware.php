@@ -29,7 +29,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
             $sensitiveFields = ['password', 'confirmPassword'];
 
             $_SESSION['errors'] = $e->errors;
-            //$_SESSION['old']    = array_diff_key($oldData, array_flip($sensitiveFields));
+            $_SESSION['old']    = array_diff($oldData, array_flip($sensitiveFields));
 
             return $response->withHeader('Location', $referer)->withStatus(302);
         }
