@@ -25,6 +25,7 @@ class AuthController
 
     public function registerView(Request $request, Response $response): Response
     {
+        var_dump($_SESSION);
         return $this->twig->render($response, 'auth/register.twig');
     }
 
@@ -36,13 +37,12 @@ class AuthController
         $v->rule('required', ['name', 'email','password', 'confirmPassword']);
         $v->rule('email', 'email');
         $v->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
-
         $v->rule(
             fn($field, $value, $params, $fields) => ! $this->entityManager->getRepository(User::class)->count(
                 ['email' => $value]
-        ),
-            "email"
-        )->message("User with the given email address already exists!");
+            ),
+            'email'
+        )->message('User with the given email address already exists');
 
         if($v->validate()) {
             echo "Yay! We're all good!";

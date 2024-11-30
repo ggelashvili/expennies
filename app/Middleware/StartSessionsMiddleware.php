@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Middleware;
 
 use App\Exception\SessionException;
@@ -8,25 +10,24 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class StartSessioonMiddleware implements MiddlewareInterface
+class StartSessionsMiddleware implements MiddlewareInterface
 {
-
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-
-        if(session_status() === PHP_SESSION_ACTIVE){
-            throw new SessionException('Session is already started');
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            throw new SessionException('Session has already been started');
         }
 
-        if (headers_sent($file, $line)) {
+        if (headers_sent($fileName, $line)) {
             throw new SessionException('Headers already sent');
         }
+
         session_start();
 
-        $respnse = $handler->handle($request);
+        $response = $handler->handle($request);
 
         session_write_close();
 
-        return $respnse;
+        return $response;
     }
 }
