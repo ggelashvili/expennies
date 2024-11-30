@@ -26,6 +26,8 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
 
             $referer = $request->getServerParams()['HTTP_REFERER'] ?? '';
 
+            $_SESSION['error'] = $e->errors;
+
             return $response->withHeader('Location', $referer)->withStatus(302);
         }
     }

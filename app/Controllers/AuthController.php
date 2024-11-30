@@ -50,7 +50,6 @@ class AuthController
             throw new ValidationException($v->errors());
         }
 
-        exit;
 
 
         $user = new User();
