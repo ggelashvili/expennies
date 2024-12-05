@@ -24,7 +24,14 @@ class CategoriesController
 
     public function store(Request $request, Response $response): Response
     {
-        // TODO
+        //1. Validate request data
+        $data = $this->requestValidatorFactory->make(CreateCategoryRequestValidation::class)->validate(
+            $request->getParsedBody()
+        );
+        //2. Create a mew category record in the database
+        $this->auth->register(
+            new RegisterUserData($data['name'], $data['email'], $data['password'])
+        );
 
         return $response->withHeader('Location', '/categories')->withStatus(302);
     }
