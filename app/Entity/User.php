@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Entity;
 
 use App\Contracts\UserInterface;
 use App\Entity\Traits\HasTimestamps;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
@@ -35,15 +34,15 @@ class User implements UserInterface
     #[Column]
     private string $password;
 
-    #[OneToMany(mappedBy: 'user', targetEntity: Category::class, cascade: ['persist'])]
+    #[OneToMany(mappedBy: 'user', targetEntity: Category::class)]
     private Collection $categories;
 
-    #[OneToMany(mappedBy: 'user', targetEntity: Transaction::class, cascade: ['persist'])]
+    #[OneToMany(mappedBy: 'user', targetEntity: Transaction::class)]
     private Collection $transactions;
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
+        $this->categories   = new ArrayCollection();
         $this->transactions = new ArrayCollection();
     }
 
@@ -88,12 +87,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }

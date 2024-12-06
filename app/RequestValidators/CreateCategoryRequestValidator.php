@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\RequestValidators;
 
 use App\Contracts\RequestValidatorInterface;
-use App\Entity\User;
 use App\Exception\ValidationException;
 use Valitron\Validator;
 
 class CreateCategoryRequestValidator implements RequestValidatorInterface
 {
-
     public function validate(array $data): array
     {
         $v = new Validator($data);
@@ -19,7 +17,7 @@ class CreateCategoryRequestValidator implements RequestValidatorInterface
         $v->rule('required', 'name');
         $v->rule('lengthMax', 'name', 50);
 
-        if (!$v->validate()) {
+        if (! $v->validate()) {
             throw new ValidationException($v->errors());
         }
 

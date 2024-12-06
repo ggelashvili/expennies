@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare(strict_types = 1);
 
 namespace App\Entity\Traits;
 
@@ -17,6 +16,7 @@ trait HasTimestamps
 
     #[Column(name: 'updated_at')]
     private \DateTime $updatedAt;
+
     #[PrePersist, PreUpdate]
     public function updateTimestamps(LifecycleEventArgs $args): void
     {
