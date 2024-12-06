@@ -20,17 +20,33 @@ window.addEventListener('DOMContentLoaded', function () {
         fetch(`/categories/${categoryId}`, {
             method: 'POST',
             body: JSON.stringify({
-                name: editCategoryModal._element.querySelector('input[name="name"]').value
+                name: editCategoryModal._element.querySelector('input[name="name"]').value,
+                ...getCsrfFields()
             }),
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => response.text())
+        }).then(response => response.json())
             .then(response => {
                 console.log(response)
             })
     })
 })
+
+function getCsrfFields()
+{
+    const csrfNameField = document.querySelector('#csfName')
+    const csrfValueField = document.querySelector('#csrfValue')
+    const srfNameKey = csrfNameField.getAttribute(' name')
+    const csrfName = csrfNameField.content
+    const crfValueKey = csrfValueField.getAttribute(' name')
+    const csrfValue = csrfValueField.content
+
+    return {
+        [csrfNameKey] : csrfName,
+        [csrfValue] : csrfValue
+    }
+}
 
 function openEditCategoryModal(modal, {id, name}) {
     const nameInput = modal._element.querySelector('input[name="name"]')
