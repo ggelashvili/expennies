@@ -35,10 +35,10 @@ class User implements UserInterface
     #[Column]
     private string $password;
 
-    #[OneToMany(mappedBy: 'user', targetEntity: Category::class)]
+    #[OneToMany(mappedBy: 'user', targetEntity: Category::class, cascade: ['persist'])]
     private Collection $categories;
 
-    #[OneToMany(mappedBy: 'user', targetEntity: Transaction::class)]
+    #[OneToMany(mappedBy: 'user', targetEntity: Transaction::class, cascade: ['persist'])]
     private Collection $transactions;
 
     public function __construct()
