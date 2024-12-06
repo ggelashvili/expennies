@@ -99,7 +99,7 @@ return [
     RequestValidatorFactoryInterface::class => fn(ContainerInterface $container) => $container->get(
         RequestValidatorFactory::class
     ),
-    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory) => new Guard(
-        $responseFactory, persistentTokenMode: true
+    'csrf'                                  => fn(ResponseFactoryInterface $responseFactory, Csrf $csrf) => new Guard(
+        $responseFactory, persistentTokenMode: true, failureHandler: $csrf->failureHanddler()
     ),
 ];
