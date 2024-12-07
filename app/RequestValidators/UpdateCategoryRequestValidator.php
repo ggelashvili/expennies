@@ -14,7 +14,7 @@ class UpdateCategoryRequestValidator implements RequestValidatorInterface
     {
         $v = new Validator($data);
 
-        $v->rule('required', 'name');
+        $v->rule('required', ['name', 'id']);
         $v->rule('lengthMax', 'name', 50);
         $v->rule('integer', 'id');
 
