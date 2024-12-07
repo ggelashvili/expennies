@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', function () {
             const categoryId = event.currentTarget.getAttribute('data-id')
 
             get(`/categories/${ categoryId }`)
+                .then(response => response.json())
                 .then(response => openEditCategoryModal(editCategoryModal, response))
         })
     })
@@ -19,7 +20,9 @@ window.addEventListener('DOMContentLoaded', function () {
         post(`/categories/${ categoryId }`, {
             name: editCategoryModal._element.querySelector('input[name="name"]').value
         }).then(response => {
-            console.log(response)
+            if (response.ok){
+            editCategoryModal.hide()
+            }
         })
     })
 })

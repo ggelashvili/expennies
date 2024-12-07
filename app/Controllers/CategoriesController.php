@@ -49,7 +49,7 @@ class CategoriesController
     {
         $this->categoryService->delete((int) $args['id']);
 
-        return $response->withHeader('Location', '/categories')->withStatus(302);
+        return $response;
     }
 
     public function get(Request $request, Response $response, array $args): Response

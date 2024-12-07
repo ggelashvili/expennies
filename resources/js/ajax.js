@@ -1,3 +1,5 @@
+import * as response from "express";
+
 const ajax = (url, method = 'get', data = {}) => {
     method = method.toLowerCase()
 
@@ -17,7 +19,17 @@ const ajax = (url, method = 'get', data = {}) => {
         url += '?' + (new URLSearchParams(data)).toString();
     }
 
-    return fetch(url, options).then(response => response.json())
+    return fetch(url, options).then(response => {
+        if (!response.ok) {
+            if (response.status === 422) {
+                response.json().then( errors => {
+                    console.log(errors)
+                })
+            }
+        }
+        return response
+        }
+    )
 }
 
 const get  = (url, data) => ajax(url, 'get', data)
