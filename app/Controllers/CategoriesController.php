@@ -80,20 +80,21 @@ class CategoriesController
     public function load(Request $request, Response $response): Response
     {
         $params = $request->getQueryParams();
+        $categories =  $this->categoryService->getPaginatedCategories((int) $params['start'], (int) $params['length']);
 
-        $categories = array_map(function (Category $category) {
+        $transformer = function (Category $category) {
             return [
                 'id'        => $category->getId(),
                 'name'      => $category->getName(),
                 'createdAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
                 'updatedAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
             ];
-        }, $this->categoryService->getAll());
+        };
 
         return $this->responseFormatter->asJson(
             $response,
             [
-                'data'            => $categories,
+                'data'            => array_map($transformer, (array)$categories->getIterator()),
                 'draw'            => (int) $params['draw'],
                 'recordsTotal'    => count($categories),
                 'recordsFiltered' => count($categories),

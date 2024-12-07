@@ -38,7 +38,7 @@ const ajax = (url, method = 'get', data = {}, domElement = null) => {
 
         return response
     })
-
+}
 
 const get  = (url, data) => ajax(url, 'get', data)
 const post = (url, data, domElement) => ajax(url, 'post', data, domElement)
