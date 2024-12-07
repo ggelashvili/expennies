@@ -74,8 +74,8 @@ class CategoriesController
         if (! $category) {
             return $response->withStatus (404);
         }
-        $data = ['status' => 'ok'];
+        $this->categoryService->update($category, $data['name']);
 
-        return $this->responseFormatter->asJson($response, $data);
+        return $response;
     }
 }
