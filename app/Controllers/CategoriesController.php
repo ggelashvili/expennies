@@ -74,6 +74,7 @@ class CategoriesController
         if (! $category) {
             return $response->withStatus (404);
         }
+
         $this->categoryService->update($category, $data['name']);
 
         return $response;
