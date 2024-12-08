@@ -30,6 +30,6 @@ class ResponseFormatter
                 'recordsTotal' => $total,
                 'recordsFiltered' => $total,
             ]
-        )
+        );
     }
 }
