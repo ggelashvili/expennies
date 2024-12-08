@@ -52,7 +52,7 @@ class CategoryService
         return $category;
     }
 
-    public function getPaginatedCategories(int $start, int $length,string $orderBy, string $orderDir): Paginator
+    public function getPaginatedCategories(int $start, int $length,string $orderBy, string $orderDir, string $search): Paginator
     {
         $query =  $this->entityManager->getRepository(Category::class)
             ->createQueryBuilder('c')
@@ -60,6 +60,12 @@ class CategoryService
             ->setMaxResults($length);
         $orderBy = in_array($orderBy, ['name', 'createdAt', 'updatedAt']) ? $orderBy : 'updatedAt';
         $orderDir = strtolower($orderDir) === 'asc' ? 'asc' : 'desc';
+
+        if (!empty($search)) {
+            //$search = str_replace(['%', '_'], ['\%', '\_'], $search);
+            $query->where('c.name LIKE :name')->setParameter('name', '%' . addcslashes($search, '%_') . '%');
+        }
+
         $query->orderBy('c.' . $orderBy, $orderDir);
 
         return new Paginator($query);

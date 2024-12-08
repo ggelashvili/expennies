@@ -88,7 +88,8 @@ class CategoriesController
             (int) $params['start'],
             (int) $params['length'],
             $orderBy,
-            $orderDir
+            $orderDir,
+            $params['search']['value']
         );
 
         $transformer = function (Category $category) {
