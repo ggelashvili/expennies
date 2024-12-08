@@ -43,8 +43,10 @@ window.addEventListener('DOMContentLoaded', function () {
             const categoryId = deleteBtn.getAttribute('data-id')
 
             if (confirm('Are you sure you want to delete this category?')) {
-                del(`/categories/${ categoryId }`).then(() => {
-                    table.draw()
+                del(`/categories/${ categoryId }`).then(response => {
+                    if (response.ok) {
+                        table.draw()
+                    }
                 })
             }
         }

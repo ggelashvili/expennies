@@ -15,7 +15,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
 
-class CategoriesController
+class CategoryController
 {
     public function __construct(
         private readonly Twig $twig,

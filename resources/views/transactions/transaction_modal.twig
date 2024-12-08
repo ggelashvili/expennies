@@ -1,0 +1,45 @@
+<div class="modal fade" id="{{ modal.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ modal.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-outline form-white mb-4">
+                    <input type="text" name="description" required
+                           class="form-control form-control-lg"
+                           placeholder="Description" />
+                </div>
+                <div class="form-outline form-white mb-4">
+                    <input type="datetime-local" name="date" required
+                           class="form-control form-control-lg"
+                           placeholder="Date" />
+                </div>
+                <div class="form-outline form-white mb-4">
+                    <input type="number" name="amount" required
+                           class="form-control form-control-lg"
+                           placeholder="$ Amount" />
+                </div>
+                <div class="form-outline form-white mb-4">
+                    <select class="form-select form-select-lg" aria-label="Category" name="category">
+                        <option value="">Select Category</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>
+                    Close
+                </button>
+                <button type="button" class="btn btn-success {{ modal.isEdit ? 'save' : 'create' }}-transaction-btn">
+                    <i class="bi bi-check-circle me-1"></i>
+                    {{ modal.isEdit ? 'Save' : 'Create' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
