@@ -26,6 +26,10 @@ class TransactionService
         return $this->update($transaction, $transactionData);
 
     }
+    public function getById(int $id): Transaction
+    {
+        return $this->entityManager->find(Transaction::class, $id);
+    }
 
     public function update(Transaction $transaction, $transactionData): Transaction
     {
