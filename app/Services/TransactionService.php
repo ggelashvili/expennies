@@ -44,4 +44,12 @@ class TransactionService
 
         return $transaction;
     }
+
+    public function delete(int $id): void
+    {
+        $transaction = $this->entityManager->find(Transaction::class, $id);
+
+        $this->entityManager->remove($transaction);
+        $this->entityManager->flush();
+    }
 }

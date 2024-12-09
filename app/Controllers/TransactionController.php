@@ -48,9 +48,15 @@ class TransactionController
                 new DateTime($data['date']),
                 $data['category']
             ),
-            $request->getParsedBody('user')
+            $request->getAttribute('user')
         );
 
+        return $response;
+    }
+
+    public function delete(Request $request, Response $response, array $args): Response
+    {
+        $this->transactionService->delete((int) $args['id']);
         return $response;
     }
 
