@@ -10,6 +10,7 @@ use App\DataObjects\TransactionData;
 use App\RequestValidators\CreateTransactionRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
+use App\Services\RequestService;
 use App\Services\TransactionService;
 use DateTime;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -23,7 +24,8 @@ class TransactionController
         private readonly CategoryService $categoryService,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly TransactionService $transactionService,
-        private readonly ResponseFormatter $responseFormatter
+        private readonly ResponseFormatter $responseFormatter,
+        private readonly RequestService $requestService,
     )
     {
     }
@@ -78,6 +80,37 @@ class TransactionController
             'category' => $transaction->getCategory()->getId(),
         ];
         return $this->responseFormatter->asJson($response, $data);
+    }
+
+    public function update(Request $request, Response $response, array $args): Response
+    {
+        $data = $this->requestValidatorFactory->make(CreateTransactionRequestValidator::class)->validate(
+            $args + $request->getParsedBody()
+        );
+
+        $id = (int) $data['id'];
+
+        if (! $id || ($transaction = $this->transactionService->getById($id))) {
+            return $response->withStatus(404);
+        }
+
+        $this->transactionService->update(
+            $transaction,
+            new TransactionData(
+                $data['description'],
+                (float) $data['amount'],
+                new DateTime($data['date']),
+                $data['category']
+            )
+        );
+        return $response;
+    }
+
+    public function load(Request $request, Response $response): Response
+    {
+        $param = $this->requestService->getDataTableQueryParameters($request);
+        $transactions = $this->transactionService->getPaginatedTransaction();
+
     }
 
 }
