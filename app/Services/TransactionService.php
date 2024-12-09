@@ -52,4 +52,5 @@ class TransactionService
         $this->entityManager->remove($transaction);
         $this->entityManager->flush();
     }
+
 }

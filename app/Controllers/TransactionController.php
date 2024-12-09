@@ -8,6 +8,7 @@ namespace App\Controllers;
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\DataObjects\TransactionData;
 use App\RequestValidators\CreateTransactionRequestValidator;
+use App\ResponseFormatter;
 use App\Services\CategoryService;
 use App\Services\TransactionService;
 use DateTime;
@@ -21,7 +22,8 @@ class TransactionController
         private readonly Twig $twig,
         private readonly CategoryService $categoryService,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
-        private readonly TransactionService $transactionService
+        private readonly TransactionService $transactionService,
+        private readonly ResponseFormatter $responseFormatter
     )
     {
     }
@@ -58,6 +60,24 @@ class TransactionController
     {
         $this->transactionService->delete((int) $args['id']);
         return $response;
+    }
+
+    public function get(Request $request, Response $response, array $args): Response
+    {
+        $transaction = $this->transactionService->getById((int) $args['id']);
+
+        if (!$transaction) {
+            return $response->withStatus(404);
+        }
+
+        $data = [
+            'id' => $transaction->getId(),
+            'description' => $transaction->getDescription(),
+            'amount' => $transaction->getAmount(),
+            'date' => $transaction->getDate()->format('Y-m-d\Th:i'),
+            'category' => $transaction->getCategory()->getId(),
+        ];
+        return $this->responseFormatter->asJson($response, $data);
     }
 
 }
