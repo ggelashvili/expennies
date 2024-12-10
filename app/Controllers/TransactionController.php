@@ -7,6 +7,7 @@ namespace App\Controllers;
 
 use App\Contracts\RequestValidatorFactoryInterface;
 use App\DataObjects\TransactionData;
+use App\Entity\Transaction;
 use App\RequestValidators\CreateTransactionRequestValidator;
 use App\ResponseFormatter;
 use App\Services\CategoryService;
@@ -108,8 +109,27 @@ class TransactionController
 
     public function load(Request $request, Response $response): Response
     {
-        $param = $this->requestService->getDataTableQueryParameters($request);
-        $transactions = $this->transactionService->getPaginatedTransaction();
+        $params = $this->requestService->getDataTableQueryParameters($request);
+        $transactions = $this->transactionService->getPaginatedTransaction($params);
+
+        $transformer = function (Transaction $transaction) {
+            return [
+                'id' => $transaction->getId(),
+                'description' => $transaction->getDescription(),
+                'amount' => $transaction->getAmount(),
+                'date' => $transaction->getDate()->format('Y-m-d\Th:i'),
+                'category' => $transaction->getCategory()->getName(),
+            ];
+        };
+
+        $totalTransactions = count($transactions);
+
+        return $this->responseFormatter->asDataTable(
+            $response,
+            array_map($transformer, (array) $transactions->getIterator()),
+            $params->draw,
+            $totalTransactions,
+        );
 
     }
 
