@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Contracts\EntityManagerServiceInterface;
 use App\DataObjects\DataTableQueryParams;
 use App\Entity\Category;
+use App\Entity\Transaction;
 use App\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -88,13 +89,15 @@ class CategoryService
 
     public function getTopSpendingCategories(int $limit): array
     {
-        // TODO: Implement
-
-        return [
-            ['name' => 'Category 1', 'total' => 700],
-            ['name' => 'Category 2', 'total' => 550],
-            ['name' => 'Category 3', 'total' => 475],
-            ['name' => 'Category 4', 'total' => 325],
-        ];
+        return $this->entityManager->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('c.name', 'sum(ABS(t.amount)) as total')
+            ->join('t.category', 'c')
+            ->where('t.amount < 0')
+            ->groupBy('c.id')
+            ->orderBy('total', 'desc')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
     }
 }

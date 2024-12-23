@@ -97,7 +97,7 @@ class TransactionService
         $top = $this->entityManager->getRepository(Transaction::class)
             ->createQueryBuilder('t')
             ->select('t', 'c')
-            ->join('t.category', 'c')
+            ->leftjoin('t.category', 'c')
             ->orderBy('t.date', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
