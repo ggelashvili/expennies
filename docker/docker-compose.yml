@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     build:
-      context: ""
+      context: "."
       dockerfile: Dockerfile
       args:
         USER_ID: '${WWWUSER:-1000}'
