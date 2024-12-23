@@ -90,15 +90,20 @@ class TransactionService
             ->setParameter('endDate', $endDate)
             ->getQuery()
             ->getSingleResult();
-
-       // return ['net' => 800, 'income' => $income['income'], 'expense' => 2200];
     }
 
     public function getRecentTransactions(int $limit): array
     {
-        // TODO: Implement
+        $top = $this->entityManager->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('t', 'c')
+            ->join('t.category', 'c')
+            ->orderBy('t.date', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
 
-        return [];
+        return $top;
     }
 
     public function getMonthlySummary(int $year): array
