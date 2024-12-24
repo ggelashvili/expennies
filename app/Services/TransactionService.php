@@ -108,14 +108,30 @@ class TransactionService
 
     public function getMonthlySummary(int $year): array
     {
-        // TODO: Implement
+        $result = $this->entityManager->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('
+                        sum (CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) as income,
+                        sum (CASE WHEN t.amount < 0 THEN abs(t.amount) ELSE 0 END) as expense,
+                        MONTH(t.date) as m
+            ')
+            ->where('YEAR(t.date) = :year')
+            ->groupBy('m')
+            ->orderBy('m', 'ASC')
+            ->setParameter('year', $year)
+            ->getQuery()
+            ->getArrayResult();
 
-        return [
-            ['income' => 1500, 'expense' => 1100, 'm' => '3'],
-            ['income' => 2000, 'expense' => 1800, 'm' => '4'],
-            ['income' => 2500, 'expense' => 1900, 'm' => '5'],
-            ['income' => 2600, 'expense' => 1950, 'm' => '6'],
-            ['income' => 3000, 'expense' => 2200, 'm' => '7'],
-        ];
+        //var_dump($result);
+        //TODO: fix expense
+
+        return $result;
+//        return [
+//            ['income' => 1500, 'expense' => 1100, 'm' => '3'],
+//            ['income' => 2000, 'expense' => 1800, 'm' => '4'],
+//            ['income' => 2500, 'expense' => 1900, 'm' => '5'],
+//            ['income' => 2600, 'expense' => 1950, 'm' => '6'],
+//            ['income' => 3000, 'expense' => 2200, 'm' => '7'],
+//        ];
     }
 }

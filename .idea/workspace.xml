@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="05c567d8-8a44-42a3-afed-3a88dc94126c" name="Changes" comment="Implementing recent transactions">
+    <list default="true" id="05c567d8-8a44-42a3-afed-3a88dc94126c" name="Changes" comment="Implementing Monthly Summary">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Services/CategoryService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/CategoryService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Services/TransactionService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/TransactionService.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -206,7 +206,8 @@
       <workItem from="1734731289218" duration="4126000" />
       <workItem from="1734735787934" duration="9719000" />
       <workItem from="1734781352439" duration="13849000" />
-      <workItem from="1734965723805" duration="6946000" />
+      <workItem from="1734965723805" duration="9401000" />
+      <workItem from="1735037786457" duration="847000" />
     </task>
     <task id="LOCAL-00001" summary="Secure user verification Using signed urls">
       <option name="closed" value="true" />
@@ -368,7 +369,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734971402491</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Implementing Top spending categories">
+      <option name="closed" value="true" />
+      <created>1734974550221</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1734974550221</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -385,6 +394,8 @@
     <MESSAGE value="Implementing Rate Limiting" />
     <MESSAGE value="Implementing totals for dashboard" />
     <MESSAGE value="Implementing recent transactions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implementing recent transactions" />
+    <MESSAGE value="Implementing Top spending categories" />
+    <MESSAGE value="Implementing Monthly Summary" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implementing Monthly Summary" />
   </component>
 </project>
