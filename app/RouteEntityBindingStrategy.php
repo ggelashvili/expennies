@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App;
 
@@ -17,7 +17,7 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
 {
     public function __construct(
         private readonly EntityManagerServiceInterface $entityManagerService,
-        private readonly ResponseFactoryInterface $responseFactory
+        private readonly ResponseFactoryInterface $responseFactory,
     ) {
     }
 
@@ -28,7 +28,7 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
         array $routeArguments
     ): ResponseInterface {
         $callableReflection = $this->createReflectionForCallable($callable);
-        $resolvedArguments  = [];
+        $resolvedArguments = [];
 
         foreach ($callableReflection->getParameters() as $parameter) {
             $type = $parameter->getType();
@@ -38,34 +38,32 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
             }
 
             $paramName = $parameter->getName();
-            $typeName  = $type->getName();
+            $typeName = $type->getName();
 
             if ($type->isBuiltin()) {
                 if ($typeName === 'array' && $paramName === 'args') {
                     $resolvedArguments[] = $routeArguments;
                 }
+            } elseif ($typeName === ServerRequestInterface::class) {
+                $resolvedArguments[] = $request;
+            } elseif ($typeName === ResponseInterface::class) {
+                $resolvedArguments[] = $response;
             } else {
-                if ($typeName === ServerRequestInterface::class) {
-                    $resolvedArguments[] = $request;
-                } elseif ($typeName === ResponseInterface::class) {
-                    $resolvedArguments[] = $response;
-                } else {
-                    $entityId = $routeArguments[$paramName] ?? null;
+                $entityId = $routeArguments[$paramName] ?? null;
 
-                    if (! $entityId || $parameter->allowsNull()) {
-                        throw new \InvalidArgumentException(
-                            'Unable to resolve argument "' . $paramName . '" in the callable'
-                        );
-                    }
-
-                    $entity = $this->entityManagerService->find($typeName, $entityId);
-
-                    if (! $entity) {
-                        return $this->responseFactory->createResponse(404, 'Resource Not Found');
-                    }
-
-                    $resolvedArguments[] = $entity;
+                if (! $entityId || $parameter->allowsNull()) {
+                    throw new \InvalidArgumentException(
+                        'Unable to determine route entity binding for ' . $paramName
+                    );
                 }
+
+                $entity = $this->entityManagerService->find($typeName, $entityId);
+
+                if (! $entity) {
+                    return $this->responseFactory->createResponse(404, 'Resource Not Found');
+                }
+
+                $resolvedArguments[] = $entity;
             }
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\DataObjects;
 
@@ -12,7 +12,7 @@ class DataTableQueryParams
         public readonly string $orderBy,
         public readonly string $orderDir,
         public readonly string $searchTerm,
-        public readonly int $draw
-    ) {
+        public readonly int $draw)
+    {
     }
 }

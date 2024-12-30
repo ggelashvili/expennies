@@ -6,11 +6,10 @@ use App\Config;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
 use Symfony\Component\Console\Application;
-use Doctrine\ORM\EntityManagerInterface;
 
 $container = require 'bootstrap.php';
 $config    = $container->get(Config::class);
@@ -32,3 +31,4 @@ $cliApp->addCommands($migrationCommands($dependencyFactory));
 $cliApp->addCommands(array_map(fn($command) => $container->get($command), $customCommands));
 
 $cliApp->run();
+

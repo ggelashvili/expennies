@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Mail;
 
@@ -17,28 +17,28 @@ class ForgotPasswordEmail
         private readonly Config $config,
         private readonly MailerInterface $mailer,
         private readonly BodyRendererInterface $renderer,
-        private readonly SignedUrl $signedUrl
+        private readonly SignedUrl $signedUrl,
     ) {
     }
 
     public function send(PasswordReset $passwordReset): void
     {
-        $email   = $passwordReset->getEmail();
+        $email = $passwordReset->getEmail();
+
         $resetLink = $this->signedUrl->fromRoute(
             'password-reset',
             ['token' => $passwordReset->getToken()],
             $passwordReset->getExpiration()
         );
+
         $message = (new TemplatedEmail())
             ->from($this->config->get('mailer.from'))
             ->to($email)
             ->subject('Your Expennies Password Reset Instructions')
             ->htmlTemplate('emails/password_reset.html.twig')
-            ->context(
-                [
-                    'resetLink' => $resetLink,
-                ]
-            );
+            ->context([
+                'resetLink' => $resetLink,
+            ]);
 
         $this->renderer->render($message);
 

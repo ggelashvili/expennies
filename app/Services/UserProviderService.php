@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -13,30 +13,30 @@ use App\Entity\User;
 class UserProviderService implements UserProviderServiceInterface
 {
     public function __construct(
-        private readonly EntityManagerServiceInterface $entityManager,
-        private readonly HashService $hashService
+        private readonly EntityManagerServiceInterface $entityManagerService,
+        private readonly HashService $hashService,
     ) {
     }
 
-    public function getById(int $userId): ?UserInterface
+    public function getById(int $id): ?UserInterface
     {
-        return $this->entityManager->find(User::class, $userId);
+        return $this->entityManagerService->getRepository(User::class)->find($id);
     }
 
     public function getByCredentials(array $credentials): ?UserInterface
     {
-        return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        return $this->entityManagerService->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
     }
 
     public function createUser(RegisterUserData $data): UserInterface
     {
         $user = new User();
 
-        $user->setName($data->name);
         $user->setEmail($data->email);
         $user->setPassword($this->hashService->hashPassword($data->password));
+        $user->setName($data->name);
 
-        $this->entityManager->sync($user);
+        $this->entityManagerService->sync($user);
 
         return $user;
     }
@@ -45,13 +45,13 @@ class UserProviderService implements UserProviderServiceInterface
     {
         $user->setVerifiedAt(new \DateTime());
 
-        $this->entityManager->sync($user);
+        $this->entityManagerService->sync($user);
     }
 
     public function updatePassword(UserInterface $user, string $password): void
     {
         $user->setPassword($this->hashService->hashPassword($password));
 
-        $this->entityManager->sync($user);
+        $this->entityManagerService->sync($user);
     }
 }

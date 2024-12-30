@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -21,7 +21,7 @@ class UserLoginCodeService
         $code = random_int(100000, 999999);
 
         $userLoginCode->setCode((string) $code);
-        $userLoginCode->setExpiration(new \DateTime('+10 minutes'));
+        $userLoginCode->setExpiration(new \Datetime('+10 minutes'));
         $userLoginCode->setUser($user);
 
         $this->entityManagerService->sync($userLoginCode);
@@ -39,7 +39,7 @@ class UserLoginCodeService
             return false;
         }
 
-        if ($userLoginCode->getExpiration() <= new \DateTime()) {
+        if ($userLoginCode->getExpiration() <= new \Datetime()) {
             return false;
         }
 
@@ -51,11 +51,12 @@ class UserLoginCodeService
         $this->entityManagerService->getRepository(UserLoginCode::class)
             ->createQueryBuilder('c')
             ->update()
-            ->set('c.isActive', '0')
+            ->set('c.isActive', 0)
             ->where('c.user = :user')
             ->andWhere('c.isActive = 1')
             ->setParameter('user', $user)
             ->getQuery()
             ->execute();
     }
+
 }

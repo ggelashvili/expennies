@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Filters;
 
@@ -12,8 +12,9 @@ class UserFilter extends SQLFilter
 {
     public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias): string
     {
-        if (! $targetEntity->getReflectionClass()->implementsInterface(OwnableInterface::class)) {
-            return '';
+        // Check if the entity implements the LocalAware interface
+        if (!$targetEntity->reflClass->implementsInterface(OwnableInterface::class)) {
+            return "";
         }
 
         return $targetTableAlias . '.user_id = ' . $this->getParameter('user_id');

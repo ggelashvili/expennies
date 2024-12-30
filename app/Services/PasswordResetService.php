@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -22,7 +22,7 @@ class PasswordResetService
         $passwordReset = new PasswordReset();
 
         $passwordReset->setToken(bin2hex(random_bytes(32)));
-        $passwordReset->setExpiration(new \DateTime('+30 minutes'));
+        $passwordReset->setExpiration(new \Datetime('+30 minutes'));
         $passwordReset->setEmail($email);
 
         $this->entityManagerService->sync($passwordReset);
@@ -32,11 +32,10 @@ class PasswordResetService
 
     public function deactivateAllPasswordResets(string $email): void
     {
-        $this->entityManagerService
-            ->getRepository(PasswordReset::class)
+        $this->entityManagerService->getRepository(PasswordReset::class)
             ->createQueryBuilder('pr')
             ->update()
-            ->set('pr.isActive', '0')
+            ->set('pr.isActive', 0)
             ->where('pr.email = :email')
             ->andWhere('pr.isActive = 1')
             ->setParameter('email', $email)
@@ -46,17 +45,14 @@ class PasswordResetService
 
     public function findByToken(string $token): ?PasswordReset
     {
-        return $this->entityManagerService
-            ->getRepository(PasswordReset::class)
-            ->createQueryBuilder('pr')
+        return $this->entityManagerService->getRepository(PasswordReset::class)->createQueryBuilder('pr')
             ->select('pr')
             ->where('pr.token = :token')
-            ->andWhere('pr.isActive = :active')
-            ->andWhere('pr.expiration > :now')
+            ->andWhere('pr.isActive = 1')
+            ->andWhere('pr.expiration >= :now')
             ->setParameters(
                 [
                     'token'  => $token,
-                    'active' => true,
                     'now'    => new \DateTime(),
                 ]
             )
@@ -72,4 +68,5 @@ class PasswordResetService
             $this->userProviderService->updatePassword($user, $password);
         });
     }
+
 }

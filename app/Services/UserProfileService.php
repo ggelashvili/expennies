@@ -1,14 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Services;
 
 use App\Contracts\EntityManagerServiceInterface;
+use App\Contracts\UserProfileServiceInterface;
 use App\DataObjects\UserProfileData;
 use App\Entity\User;
 
-class UserProfileService
+class UserProfileService implements UserProfileServiceInterface
 {
     public function __construct(private readonly EntityManagerServiceInterface $entityManagerService)
     {
@@ -22,10 +23,14 @@ class UserProfileService
         $this->entityManagerService->sync($user);
     }
 
-    public function get(int $userId): UserProfileData
+    public function get(User $user): UserProfileData
     {
-        $user = $this->entityManagerService->find(User::class, $userId);
+        $user = $this->entityManagerService->find(User::class, $user->getId());
 
-        return new UserProfileData($user->getEmail(), $user->getName(), $user->hasTwoFactorAuthEnabled());
+        return new UserProfileData(
+            $user->getEmail(),
+            $user->getName(),
+            $user->hasTwoFactorAuthEnabled()
+        );
     }
 }

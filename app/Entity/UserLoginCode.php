@@ -1,17 +1,17 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity, Table('user_login_codes')]
+#[Entity, Table(name: 'user_login_codes')]
 class UserLoginCode
 {
     #[Id, Column(options: ['unsigned' => true]), GeneratedValue]
@@ -26,12 +26,12 @@ class UserLoginCode
     #[Column]
     private \DateTime $expiration;
 
-    #[ManyToOne]
+    #[ManyToOne(targetEntity: User::class, inversedBy: 'user_login_codes')]
     private User $user;
 
     public function __construct()
     {
-        $this->isActive = true;
+        $this->setIsActive(true);
     }
 
     public function getId(): int
@@ -51,7 +51,7 @@ class UserLoginCode
         return $this;
     }
 
-    public function isActive(): bool
+    public function getIsActive(): bool
     {
         return $this->isActive;
     }
@@ -86,4 +86,6 @@ class UserLoginCode
 
         return $this;
     }
+
+
 }

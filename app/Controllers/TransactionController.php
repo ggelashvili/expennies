@@ -17,6 +17,7 @@ use App\Services\TransactionService;
 use DateTime;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\SimpleCache\CacheInterface;
 use Slim\Views\Twig;
 
 class TransactionController
@@ -28,7 +29,8 @@ class TransactionController
         private readonly ResponseFormatter $responseFormatter,
         private readonly RequestService $requestService,
         private readonly CategoryService $categoryService,
-        private readonly EntityManagerServiceInterface $entityManagerService
+        private readonly EntityManagerServiceInterface $entityManagerService,
+        private readonly CacheInterface $cache
     ) {
     }
 
@@ -43,6 +45,7 @@ class TransactionController
 
     public function store(Request $request, Response $response): Response
     {
+        $this->cache->clear();
         $data = $this->requestValidatorFactory->make(TransactionRequestValidator::class)->validate(
             $request->getParsedBody()
         );
@@ -64,6 +67,7 @@ class TransactionController
 
     public function delete(Response $response, Transaction $transaction): Response
     {
+        $this->cache->clear();
         $this->entityManagerService->delete($transaction, true);
 
         return $response;
@@ -71,11 +75,12 @@ class TransactionController
 
     public function get(Response $response, Transaction $transaction): Response
     {
+        $this->cache->clear();
         $data = [
             'id'          => $transaction->getId(),
             'description' => $transaction->getDescription(),
             'amount'      => $transaction->getAmount(),
-            'date'        => $transaction->getDate()->format('Y-m-d\TH:i'),
+            'date'        => $transaction->getDate()->format('d.m.Y H:i:s'),
             'category'    => $transaction->getCategory()?->getId(),
         ];
 
@@ -84,35 +89,42 @@ class TransactionController
 
     public function update(Request $request, Response $response, Transaction $transaction): Response
     {
+        $this->cache->clear();
         $data = $this->requestValidatorFactory->make(TransactionRequestValidator::class)->validate(
             $request->getParsedBody()
         );
 
-        $this->entityManagerService->sync(
-            $this->transactionService->update(
-                $transaction,
-                new TransactionData(
-                    $data['description'],
-                    (float) $data['amount'],
-                    new DateTime($data['date']),
-                    $data['category']
-                )
+        $transaction = $this->transactionService->update(
+            $transaction,
+            new TransactionData(
+                $data['description'],
+                (float) $data['amount'],
+                new DateTime($data['date']),
+                $data['category']
             )
         );
+
+        $this->entityManagerService->sync($transaction);
 
         return $response;
     }
 
     public function load(Request $request, Response $response): Response
     {
-        $params       = $this->requestService->getDataTableQueryParameters($request);
+        $params   = $this->requestService->getDataTableQueryParams($request);
+        $cacheKey = $request->getAttribute('user')->getId() . '_' . 'dashboard_' . $params->start . '_' . $params->length;
+        if ($this->cache->has($cacheKey)) {
+            return $this->responseFormatter->asDataTable(
+                $response, ...$this->cache->get($cacheKey));
+        }
+
         $transactions = $this->transactionService->getPaginatedTransactions($params);
         $transformer  = function (Transaction $transaction) {
             return [
                 'id'          => $transaction->getId(),
                 'description' => $transaction->getDescription(),
                 'amount'      => $transaction->getAmount(),
-                'date'        => $transaction->getDate()->format('m/d/Y g:i A'),
+                'date'        => $transaction->getDate()->format('d.m.Y H:i:s'),
                 'category'    => $transaction->getCategory()?->getName(),
                 'wasReviewed' => $transaction->wasReviewed(),
                 'receipts'    => $transaction->getReceipts()->map(fn(Receipt $receipt) => [
@@ -124,16 +136,21 @@ class TransactionController
 
         $totalTransactions = count($transactions);
 
+        $dashboard = [array_map($transformer, (array) $transactions->getIterator()),
+            $params->draw,
+            $totalTransactions];
+
+        $this->cache->set($cacheKey, $dashboard);
+
         return $this->responseFormatter->asDataTable(
             $response,
-            array_map($transformer, (array) $transactions->getIterator()),
-            $params->draw,
-            $totalTransactions
+            ...$dashboard
         );
     }
 
     public function toggleReviewed(Response $response, Transaction $transaction): Response
     {
+        $this->cache->clear();
         $this->transactionService->toggleReviewed($transaction);
         $this->entityManagerService->sync();
 

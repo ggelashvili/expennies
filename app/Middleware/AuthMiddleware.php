@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Middleware;
 
@@ -20,7 +20,7 @@ class AuthMiddleware implements MiddlewareInterface
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly AuthInterface $auth,
         private readonly Twig $twig,
-        private readonly EntityManagerServiceInterface $entityManagerService
+        private readonly EntityManagerServiceInterface $entityManagerService,
     ) {
     }
 
@@ -30,7 +30,7 @@ class AuthMiddleware implements MiddlewareInterface
             $this->twig->getEnvironment()->addGlobal('auth', ['id' => $user->getId(), 'name' => $user->getName()]);
             $this->twig->getEnvironment()->addGlobal(
                 'current_route',
-                RouteContext::fromRequest($request)->getRoute()->getName()
+                    RouteContext::fromRequest($request)->getRoute()->getName()
             );
 
             $this->entityManagerService->enableUserAuthFilter($user->getId());

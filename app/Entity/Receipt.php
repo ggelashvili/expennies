@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping\Column;
@@ -11,13 +9,13 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity, Table('receipts')]
+#[Entity, Table(name: 'receipts')]
 class Receipt
 {
     #[Id, Column(options: ['unsigned' => true]), GeneratedValue]
     private int $id;
 
-    #[Column]
+    #[Column(name: 'filename')]
     private string $filename;
 
     #[Column(name: 'storage_filename')]
@@ -29,7 +27,7 @@ class Receipt
     #[Column(name: 'created_at')]
     private \DateTime $createdAt;
 
-    #[ManyToOne(inversedBy: 'receipts')]
+    #[ManyToOne(targetEntity: Transaction::class, inversedBy: 'receipts')]
     private Transaction $transaction;
 
     public function getId(): int

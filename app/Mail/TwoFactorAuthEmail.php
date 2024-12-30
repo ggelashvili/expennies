@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Mail;
 
@@ -15,23 +15,21 @@ class TwoFactorAuthEmail
     public function __construct(
         private readonly Config $config,
         private readonly MailerInterface $mailer,
-        private readonly BodyRendererInterface $renderer
+        private readonly BodyRendererInterface $renderer,
     ) {
     }
 
     public function send(UserLoginCode $userLoginCode): void
     {
-        $email   = $userLoginCode->getUser()->getEmail();
+        $email = $userLoginCode->getUser()->getEmail();
         $message = (new TemplatedEmail())
             ->from($this->config->get('mailer.from'))
             ->to($email)
-            ->subject('Your Expennies Verification Code')
+            ->subject('Your Expennies Verification code')
             ->htmlTemplate('emails/two_factor.html.twig')
-            ->context(
-                [
-                    'code' => $userLoginCode->getCode(),
-                ]
-            );
+            ->context([
+                'code' => $userLoginCode->getCode(),
+            ]);
 
         $this->renderer->render($message);
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controllers;
 
@@ -13,8 +13,8 @@ use App\RequestValidators\RegisterUserRequestValidator;
 use App\RequestValidators\TwoFactorLoginRequestValidator;
 use App\RequestValidators\UserLoginRequestValidator;
 use App\ResponseFormatter;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 
 class AuthController
@@ -39,13 +39,11 @@ class AuthController
 
     public function register(Request $request, Response $response): Response
     {
-        $data = $this->requestValidatorFactory->make(RegisterUserRequestValidator::class)->validate(
-            $request->getParsedBody()
-        );
+        $data = $this->requestValidatorFactory
+            ->make(RegisterUserRequestValidator::class)
+            ->validate($request->getParsedBody());
 
-        $this->auth->register(
-            new RegisterUserData($data['name'], $data['email'], $data['password'])
-        );
+        $this->auth->register(new RegisterUserData($data['name'], $data['email'], $data['password']));
 
         return $response->withHeader('Location', '/')->withStatus(302);
     }
@@ -78,12 +76,12 @@ class AuthController
 
     public function twoFactorLogin(Request $request, Response $response): Response
     {
-        $data = $this->requestValidatorFactory->make(TwoFactorLoginRequestValidator::class)->validate(
-            $request->getParsedBody()
-        );
+        $data = $this->requestValidatorFactory
+            ->make(TwoFactorLoginRequestValidator::class)
+            ->validate($request->getParsedBody());
 
         if (! $this->auth->attemptTwoFactorLogin($data)) {
-            throw new ValidationException(['code' => ['Invalid Code']]);
+            throw new ValidationException(['code' => ['Invalid two factor authentication code']]);
         }
 
         return $response;

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Controllers;
 
@@ -22,7 +22,7 @@ class PasswordResetController
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly UserProviderServiceInterface $userProviderService,
         private readonly PasswordResetService $passwordResetService,
-        private readonly ForgotPasswordEmail $forgotPasswordEmail
+        private readonly ForgotPasswordEmail $forgotPasswordEmail,
     ) {
     }
 

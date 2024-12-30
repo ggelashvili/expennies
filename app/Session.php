@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App;
 
@@ -17,27 +17,25 @@ class Session implements SessionInterface
     public function start(): void
     {
         if ($this->isActive()) {
-            throw new SessionException('Session has already been started');
+            throw new SessionException('Session already started');
         }
 
         if (headers_sent($fileName, $line)) {
-            throw new SessionException('Headers have already sent by ' . $fileName . ':' . $line);
+            throw new SessionException('Headers have already been sent by ' . $fileName . ' on line: ' . $line);
         }
 
-        session_set_cookie_params(
-            [
-                'secure'   => $this->options->secure,
-                'httponly' => $this->options->httpOnly,
-                'samesite' => $this->options->sameSite->value,
-            ]
-        );
+        session_set_cookie_params([
+            'secure' => $this->options->secure,
+            'httponly' => $this->options->httpOnly,
+            'samesite' => $this->options->sameSite->value,
+        ]);
 
         if (! empty($this->options->name)) {
             session_name($this->options->name);
         }
 
         if (! session_start()) {
-            throw new SessionException('Unable to start the session');
+            throw new SessionException('Failed to start session');
         }
     }
 
@@ -56,9 +54,9 @@ class Session implements SessionInterface
         return $this->has($key) ? $_SESSION[$key] : $default;
     }
 
-    public function has(string $key): bool
+    public function put(string $key, mixed $value): void
     {
-        return array_key_exists($key, $_SESSION);
+        $_SESSION[$key] = $value;
     }
 
     public function regenerate(): bool
@@ -66,14 +64,14 @@ class Session implements SessionInterface
         return session_regenerate_id();
     }
 
-    public function put(string $key, mixed $value): void
-    {
-        $_SESSION[$key] = $value;
-    }
-
     public function forget(string $key): void
     {
         unset($_SESSION[$key]);
+    }
+
+    public function has(string $key): bool
+    {
+        return array_key_exists($key, $_SESSION);
     }
 
     public function flash(string $key, array $messages): void

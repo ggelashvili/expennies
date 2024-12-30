@@ -24,7 +24,7 @@ class CategoryController
         private readonly CategoryService $categoryService,
         private readonly ResponseFormatter $responseFormatter,
         private readonly RequestService $requestService,
-        private readonly EntityManagerServiceInterface $entityManagerService
+        private readonly EntityManagerServiceInterface $entityManagerService,
     ) {
     }
 
@@ -66,21 +66,24 @@ class CategoryController
             $request->getParsedBody()
         );
 
-        $this->entityManagerService->sync($this->categoryService->update($category, $data['name']));
+        $category = $this->categoryService->update($category, $data['name']);
+
+        $this->entityManagerService->sync($category);
 
         return $response;
     }
 
     public function load(Request $request, Response $response): Response
     {
-        $params      = $this->requestService->getDataTableQueryParameters($request);
-        $categories  = $this->categoryService->getPaginatedCategories($params);
+        $params = $this->requestService->getDataTableQueryParams($request);
+
+        $categories = $this->categoryService->getPaginatedCategories($params);
         $transformer = function (Category $category) {
             return [
                 'id'        => $category->getId(),
                 'name'      => $category->getName(),
-                'createdAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
-                'updatedAt' => $category->getUpdatedAt()->format('m/d/Y g:i A'),
+                'createdAt' => $category->getCreatedAt()->format('d.m.Y H:i:s'),
+                'updatedAt' => $category->getCreatedAt()->format('d.m.Y H:i:s'),
             ];
         };
 

@@ -50,7 +50,7 @@ class Transaction implements OwnableInterface
 
     public function __construct()
     {
-        $this->receipts    = new ArrayCollection();
+        $this->receipts = new ArrayCollection();
         $this->wasReviewed = false;
     }
 
@@ -136,7 +136,7 @@ class Transaction implements OwnableInterface
         return $this->wasReviewed;
     }
 
-    public function setReviewed(bool $wasReviewed): Transaction
+    public function setWasReviewed(bool $wasReviewed): Transaction
     {
         $this->wasReviewed = $wasReviewed;
 

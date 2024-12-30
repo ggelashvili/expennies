@@ -35,11 +35,11 @@ class User implements UserInterface
     #[Column]
     private string $password;
 
-    #[Column(name: 'two_factor', options: ['default' => false])]
-    private bool $twoFactor;
-
     #[Column(name: 'verified_at', nullable: true)]
     private ?\DateTime $verifiedAt;
+
+    #[Column(name: 'two_factor', options: ['default' => false])]
+    private bool $twoFactor;
 
     #[OneToMany(mappedBy: 'user', targetEntity: Category::class)]
     private Collection $categories;
@@ -51,7 +51,6 @@ class User implements UserInterface
     {
         $this->categories   = new ArrayCollection();
         $this->transactions = new ArrayCollection();
-        $this->twoFactor    = false;
     }
 
     public function getId(): int

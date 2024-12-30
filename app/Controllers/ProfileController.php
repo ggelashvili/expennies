@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace App\Controllers;
 
 use App\Contracts\RequestValidatorFactoryInterface;
+use App\Contracts\UserProfileServiceInterface;
 use App\DataObjects\UserProfileData;
 use App\RequestValidators\UpdatePasswordRequestValidator;
 use App\RequestValidators\UpdateProfileRequestValidator;
 use App\Services\PasswordResetService;
-use App\Services\UserProfileService;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 
 class ProfileController
@@ -19,17 +17,19 @@ class ProfileController
     public function __construct(
         private readonly Twig $twig,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
-        private readonly UserProfileService $userProfileService,
-        private readonly PasswordResetService $passwordResetService
+        private readonly UserProfileServiceInterface $userProfileService,
+        private readonly PasswordResetService $passwordResetService,
     ) {
     }
 
     public function index(Request $request, Response $response): Response
     {
+        $user = $request->getAttribute('user');
+
         return $this->twig->render(
             $response,
             'profile/index.twig',
-            ['profileData' => $this->userProfileService->get($request->getAttribute('user')->getId())]
+            ['profileData' => $this->userProfileService->get($user)]
         );
     }
 
@@ -42,7 +42,11 @@ class ProfileController
 
         $this->userProfileService->update(
             $user,
-            new UserProfileData($user->getEmail(), $data['name'], (bool) ($data['twoFactor'] ?? false))
+            new UserProfileData(
+                $user->getEmail(),
+                $data['name'],
+                (bool) $data['twoFactor'] ?? false
+            )
         );
 
         return $response;
@@ -51,9 +55,9 @@ class ProfileController
     public function updatePassword(Request $request, Response $response): Response
     {
         $user = $request->getAttribute('user');
-        $data = $this->requestValidatorFactory->make(UpdatePasswordRequestValidator::class)->validate(
-            $request->getParsedBody() + ['user' => $user]
-        );
+        $data = $this->requestValidatorFactory
+            ->make(UpdatePasswordRequestValidator::class)
+            ->validate($request->getParsedBody() + ['user' => $user]);
 
         $this->passwordResetService->updatePassword($user, $data['newPassword']);
 

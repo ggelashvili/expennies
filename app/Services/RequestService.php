@@ -36,7 +36,7 @@ class RequestService
         return $request->getHeaderLine('X-Requested-With') === 'XMLHttpRequest';
     }
 
-    public function getDataTableQueryParameters(ServerRequestInterface $request): DataTableQueryParams
+    public function getDataTableQueryParams(ServerRequestInterface $request): DataTableQueryParams
     {
         $params = $request->getQueryParams();
 

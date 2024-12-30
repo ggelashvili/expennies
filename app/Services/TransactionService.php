@@ -44,7 +44,7 @@ class TransactionService
 
         if (! empty($params->searchTerm)) {
             $query->where('t.description LIKE :description')
-                  ->setParameter('description', '%' . addcslashes($params->searchTerm, '%_') . '%');
+                ->setParameter('description', '%' . addcslashes($params->searchTerm, '%_') . '%');
         }
 
         if ($orderBy === 'category') {
@@ -71,25 +71,44 @@ class TransactionService
         return $transaction;
     }
 
-    public function toggleReviewed(Transaction $transaction): void
+    public function toggleReviewed(Transaction $transaction): Transaction
     {
-        $transaction->setReviewed(! $transaction->wasReviewed());
+        return $transaction->setWasReviewed(! $transaction->wasReviewed());
     }
 
     public function getTotals(\DateTime $startDate, \DateTime $endDate): array
     {
-        $query = $this->entityManager->createQuery(
-            'SELECT SUM(t.amount) AS net, 
-                    SUM(CASE WHEN t.amount > 0 THEN t.amount ELSE 0 END) AS income,
-                    SUM(CASE WHEN t.amount < 0 THEN ABS(t.amount) ELSE 0 END) as expense
-             FROM App\Entity\Transaction t
-             WHERE t.date BETWEEN :start AND :end'
-        );
+        $income = $this->entityManager
+            ->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('SUM(t.amount)')
+            ->where('t.date BETWEEN :startDate AND :endDate')
+            ->andWhere('t.amount > 0')
+            ->setParameters(
+                [
+                    'startDate'  => $startDate,
+                    'endDate'    => $endDate,
+                ]
+            )
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $query->setParameter('start', $startDate->format('Y-m-d 00:00:00'));
-        $query->setParameter('end', $endDate->format('Y-m-d 23:59:59'));
+        $expense = $this->entityManager
+            ->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('SUM(ABS(t.amount))')
+            ->where('t.date BETWEEN :startDate AND :endDate')
+            ->andWhere('t.amount < 0')
+            ->setParameters(
+                [
+                    'startDate'  => $startDate,
+                    'endDate'    => $endDate,
+                ]
+            )
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $query->getSingleResult();
+        return ['net' => ($income - $expense), 'income' => $income, 'expense' => $expense];
     }
 
     public function getRecentTransactions(int $limit): array
@@ -99,7 +118,8 @@ class TransactionService
             ->createQueryBuilder('t')
             ->select('t', 'c')
             ->leftJoin('t.category', 'c')
-            ->orderBy('t.date', 'desc')
+            ->select('t.description as description', 't.amount as amount', 'c.name as category', 't.date as date')
+            ->orderBy('t.date', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
             ->getArrayResult();

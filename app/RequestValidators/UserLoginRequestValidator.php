@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -10,11 +10,11 @@ use Valitron\Validator;
 
 class UserLoginRequestValidator implements RequestValidatorInterface
 {
+
     public function validate(array $data): array
     {
         $v = new Validator($data);
-
-        $v->rule('required', ['email', 'password'])->message('Required field');
+        $v->rule('required', ['email', 'password'])->message('Required field');;
         $v->rule('email', 'email');
 
         if (! $v->validate()) {

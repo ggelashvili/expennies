@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -22,6 +22,6 @@ class RequestValidatorFactory implements RequestValidatorFactoryInterface
             return $validator;
         }
 
-        throw new \RuntimeException('Failed to instantiate the request validator class "' . $class . '"');
+        throw new \RuntimeException('Failed to create request validator "' . $class . '"');
     }
 }

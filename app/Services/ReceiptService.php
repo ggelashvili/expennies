@@ -20,8 +20,8 @@ class ReceiptService
         $receipt->setTransaction($transaction);
         $receipt->setFilename($filename);
         $receipt->setStorageFilename($storageFilename);
-        $receipt->setMediaType($mediaType);
         $receipt->setCreatedAt(new \DateTime());
+        $receipt->setMediaType($mediaType);
 
         return $receipt;
     }

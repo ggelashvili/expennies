@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Contracts;
 
@@ -14,9 +14,9 @@ interface SessionInterface
 
     public function get(string $key, mixed $default = null): mixed;
 
-    public function regenerate(): bool;
-
     public function put(string $key, mixed $value): void;
+
+    public function regenerate(): bool;
 
     public function forget(string $key): void;
 

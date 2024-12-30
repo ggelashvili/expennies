@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types = 1);
-
 namespace App\Entity;
 
 use App\Contracts\OwnableInterface;
@@ -17,7 +15,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity, Table('categories')]
+#[Entity, Table(name: 'categories')]
 #[HasLifecycleCallbacks]
 class Category implements OwnableInterface
 {
@@ -29,10 +27,10 @@ class Category implements OwnableInterface
     #[Column]
     private string $name;
 
-    #[ManyToOne(inversedBy: 'categories')]
+    #[ManyToOne(targetEntity: User::class, inversedBy: 'categories')]
     private User $user;
 
-    #[OneToMany(mappedBy: 'category', targetEntity: Transaction::class)]
+    #[OneToMany(mappedBy: 'categories', targetEntity: Transaction::class)]
     private Collection $transactions;
 
     public function __construct()
@@ -71,7 +69,7 @@ class Category implements OwnableInterface
         return $this;
     }
 
-    public function getTransactions(): ArrayCollection|Collection
+    public function getTransactions(): Collection
     {
         return $this->transactions;
     }

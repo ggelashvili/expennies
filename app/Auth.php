@@ -23,7 +23,7 @@ class Auth implements AuthInterface
         private readonly SessionInterface $session,
         private readonly SignupEmail $signupEmail,
         private readonly TwoFactorAuthEmail $twoFactorAuthEmail,
-        private readonly UserLoginCodeService $userLoginCodeService
+        private readonly UserLoginCodeService $userLoginCodeService,
     ) {
     }
 
@@ -101,13 +101,14 @@ class Auth implements AuthInterface
         $this->user = $user;
     }
 
-    public function startLoginWith2FA(UserInterface $user): void
+    private function startLoginWith2FA(UserInterface $user): void
     {
         $this->session->regenerate();
         $this->session->put('2fa', $user->getId());
 
         $this->userLoginCodeService->deactivateAllActiveCodes($user);
 
+        // send email
         $this->twoFactorAuthEmail->send($this->userLoginCodeService->generate($user));
     }
 
@@ -129,11 +130,11 @@ class Auth implements AuthInterface
             return false;
         }
 
+        $this->userLoginCodeService->deactivateAllActiveCodes($user);
+
         $this->session->forget('2fa');
 
         $this->logIn($user);
-
-        $this->userLoginCodeService->deactivateAllActiveCodes($user);
 
         return true;
     }

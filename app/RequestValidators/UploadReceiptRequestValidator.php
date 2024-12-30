@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -18,14 +18,14 @@ class UploadReceiptRequestValidator implements RequestValidatorInterface
 
         // 1. Validate uploaded file
         if (! $uploadedFile) {
-            throw new ValidationException(['receipt' => ['Please select a receipt file']]);
+            throw new ValidationException(['receipt' => ['Please select a Receipt file']]);
         }
 
         if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
-            throw new ValidationException(['receipt' => ['Failed to upload the receipt file']]);
+            throw new ValidationException(['receipt' => ['Upload failed']]);
         }
 
-        // 2. Validate the file size
+        // 2. Validate file size
         $maxFileSize = 5 * 1024 * 1024;
 
         if ($uploadedFile->getSize() > $maxFileSize) {
@@ -36,10 +36,10 @@ class UploadReceiptRequestValidator implements RequestValidatorInterface
         $filename = $uploadedFile->getClientFilename();
 
         if (! preg_match('/^[a-zA-Z0-9\s._-]+$/', $filename)) {
-            throw new ValidationException(['receipt' => ['Invalid filename']]);
+            throw new ValidationException(['receipt' => ['Receipt name contains invalid characters.']]);
         }
 
-        // 4. Validate file type
+        // 4. Validate the file type
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
         $tmpFilePath      = $uploadedFile->getStream()->getMetadata('uri');
 

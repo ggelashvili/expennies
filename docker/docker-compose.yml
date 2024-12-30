@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   app:
     build:
-      context: ""
+      context: "."
       dockerfile: Dockerfile
       args:
         USER_ID: '${WWWUSER:-1000}'
@@ -28,6 +26,7 @@ services:
     volumes:
       - ../:/var/www
       - ./nginx:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
   db:
     container_name: expennies-db
     image: mysql:8.0
@@ -37,7 +36,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "3307:3306"
   mailhog:
     container_name: expennies-mailhog
     image: mailhog/mailhog

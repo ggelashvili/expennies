@@ -31,7 +31,6 @@ window.addEventListener('DOMContentLoaded', function () {
                         {
                             style: 'currency',
                             currency: 'USD',
-                            currencySign: 'accounting'
                         }
                     ).format(data)
 
@@ -134,7 +133,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 })
             }
         } else if (uploadReceiptBtn) {
-            uploadReceiptModal._element.querySelector('input[type="file"]').value = '';
             const transactionId = uploadReceiptBtn.getAttribute('data-id')
 
             uploadReceiptModal._element
@@ -204,10 +202,6 @@ window.addEventListener('DOMContentLoaded', function () {
                 }
             })
     })
-
-    document.getElementById('importTransactionsBtn').addEventListener('click', function (event) {
-        importTransactionsModal._element.querySelector('input[type="file"]').value = '';
-    });
 
     document.querySelector('.import-transactions-btn').addEventListener('click', function (event) {
         const formData = new FormData()

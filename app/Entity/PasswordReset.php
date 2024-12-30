@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Entity;
 
 use App\Entity\Traits\HasTimestamps;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity, Table(name: 'password_resets')]
@@ -24,7 +24,7 @@ class PasswordReset
     #[Column]
     private string $email;
 
-    #[Column(unique: true)]
+    #[Column(options: ['unique' => true])]
     private string $token;
 
     #[Column(name: 'is_active', options: ['default' => true])]
@@ -35,7 +35,7 @@ class PasswordReset
 
     public function __construct()
     {
-        $this->isActive = true;
+        $this->setIsActive(true);
     }
 
     public function getId(): int
@@ -55,7 +55,7 @@ class PasswordReset
         return $this;
     }
 
-    public function isActive(): bool
+    public function getIsActive(): bool
     {
         return $this->isActive;
     }
@@ -90,4 +90,6 @@ class PasswordReset
 
         return $this;
     }
+
+
 }

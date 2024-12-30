@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -12,15 +12,16 @@ class UpdatePasswordRequestValidator implements RequestValidatorInterface
 {
     public function validate(array $data): array
     {
+        $v = new Validator($data);
         $user = $data['user'];
-        $v    = new Validator($data);
 
         $v->rule('required', ['currentPassword', 'newPassword'])->message('Required field');
-        $v->rule('lengthMin', 'newPassword', '8')->label('Password');
+        $v->rule('lengthMin', 'newPassword', 8);
+        $v->rule('different', 'currentPassword', 'newPassword')->message('New password must differs from current password');
         $v->rule(
-            fn($field, $value, $params, $fields) => password_verify($data['currentPassword'], $user->getPassword()),
+            fn ($field, $value, $params, $fields) => password_verify($data['currentPassword'], $user->getPassword()),
             'currentPassword',
-        )->message('Invalid current password');
+        )->message('Incorrect current password');
 
         if (! $v->validate()) {
             throw new ValidationException($v->errors());

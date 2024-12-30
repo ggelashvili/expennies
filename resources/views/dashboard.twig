@@ -46,18 +46,18 @@
                 <h4>Recent Transactions</h4>
                 <table class="table">
                     <tbody>
-                        {% for transaction in transactions %}
-                            <tr>
-                                <td>{{ transaction.description[0:20] }}</td>
-                                <td class="{{ transaction.amount > 0 ? 'text-success fw-bold' : '' }}">
-                                    {{ transaction.amount < 0 ? '-' : '' }}${{ transaction.amount | abs | number_format(2) }}
-                                </td>
-                                <td>
-                                    <div>{{ transaction.category ? transaction.category.name : 'N/A' }}</div>
-                                    <div>{{ transaction.date | date('m/d/Y') }}</div>
-                                </td>
-                            </tr>
-                        {% endfor %}
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.description[0:20] }}</td>
+                            <td class="{{ transaction.amount > 0 ? 'text-success fw-bold' : '' }}">
+                                {{ transaction.amount < 0 ? '-' : '' }}${{ transaction.amount | abs | number_format(2) }}
+                            </td>
+                            <td>
+                                <div>{{ transaction.category ? transaction.category : 'N/A' }}</div>
+                                <div>{{ transaction.date | date('d/m/Y') }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

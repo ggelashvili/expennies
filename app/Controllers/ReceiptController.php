@@ -14,6 +14,7 @@ use League\Flysystem\Filesystem;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\UploadedFileInterface;
+use Psr\SimpleCache\CacheInterface;
 use Slim\Psr7\Stream;
 
 class ReceiptController
@@ -22,12 +23,14 @@ class ReceiptController
         private readonly Filesystem $filesystem,
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly ReceiptService $receiptService,
-        private readonly EntityManagerServiceInterface $entityManagerService
+        private readonly EntityManagerServiceInterface $entityManagerService,
+        private readonly CacheInterface $cache
     ) {
     }
 
     public function store(Request $request, Response $response, Transaction $transaction): Response
     {
+        $this->cache->clear();
         /** @var UploadedFileInterface $file */
         $file     = $this->requestValidatorFactory->make(UploadReceiptRequestValidator::class)->validate(
             $request->getUploadedFiles()
@@ -39,7 +42,6 @@ class ReceiptController
         $this->filesystem->write('receipts/' . $randomFilename, $file->getStream()->getContents());
 
         $receipt = $this->receiptService->create($transaction, $filename, $randomFilename, $file->getClientMediaType());
-
         $this->entityManagerService->sync($receipt);
 
         return $response;
@@ -47,20 +49,23 @@ class ReceiptController
 
     public function download(Response $response, Transaction $transaction, Receipt $receipt): Response
     {
+        $this->cache->clear();
         if ($receipt->getTransaction()->getId() !== $transaction->getId()) {
             return $response->withStatus(401);
         }
 
         $file = $this->filesystem->readStream('receipts/' . $receipt->getStorageFilename());
 
-        $response = $response->withHeader('Content-Disposition', 'inline; filename="' . $receipt->getFilename() . '"')
-                             ->withHeader('Content-Type', $receipt->getMediaType());
+        $response = $response
+            ->withHeader('Content-Disposition', 'inline; filename="' . $receipt->getFilename() . '"')
+            ->withHeader('Content-Type', $receipt->getMediaType());
 
         return $response->withBody(new Stream($file));
     }
 
     public function delete(Response $response, Transaction $transaction, Receipt $receipt): Response
     {
+        $this->cache->clear();
         if ($receipt->getTransaction()->getId() !== $transaction->getId()) {
             return $response->withStatus(401);
         }

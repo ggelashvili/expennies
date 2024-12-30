@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Contracts\EntityManagerServiceInterface;
 use App\DataObjects\DataTableQueryParams;
 use App\Entity\Category;
+use App\Entity\Transaction;
 use App\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -27,23 +28,23 @@ class CategoryService
 
     public function getPaginatedCategories(DataTableQueryParams $params): Paginator
     {
-        $query = $this->entityManager
-            ->getRepository(Category::class)
-            ->createQueryBuilder('c')
+        $query = $this->entityManager->getRepository(Category::class)
+            ->createQueryBuilder("c")
             ->setFirstResult($params->start)
             ->setMaxResults($params->length);
 
-        $orderBy  = in_array($params->orderBy, ['name', 'createdAt', 'updatedAt']) ? $params->orderBy : 'updatedAt';
-        $orderDir = strtolower($params->orderDir) === 'asc' ? 'asc' : 'desc';
+
+        // defense against SQL Injection
+        $orderBy = in_array($params->orderBy, ['name', 'createdAt', 'updatedAt']) ? $params->orderBy : 'updatedAt';
+        $orderDir = in_array(strtolower($params->orderDir), ['asc', 'desc']) ? strtolower($params->orderDir) : 'asc';
 
         if (! empty($params->searchTerm)) {
-            $query->where('c.name LIKE :name')->setParameter(
-                'name',
-                '%' . addcslashes($params->searchTerm, '%_') . '%'
-            );
+            $query
+                ->where("c.name LIKE :search")
+                ->setParameter('search', '%' . addcslashes($params->searchTerm, '%_') . '%');
         }
 
-        $query->orderBy('c.' . $orderBy, $orderDir);
+        $query->orderBy("c.".$orderBy, $orderDir);
 
         return new Paginator($query);
     }
@@ -51,6 +52,11 @@ class CategoryService
     public function getById(int $id): ?Category
     {
         return $this->entityManager->find(Category::class, $id);
+    }
+
+    public function getByName(string $name): ?Category
+    {
+        return $this->entityManager->getRepository(Category::class)->findOneBy(['name' => $name]) ?? null;
     }
 
     public function update(Category $category, string $name): Category
@@ -63,42 +69,38 @@ class CategoryService
     public function getCategoryNames(): array
     {
         return $this->entityManager
-            ->getRepository(Category::class)->createQueryBuilder('c')
+            ->getRepository(Category::class)
+            ->createQueryBuilder('c')
             ->select('c.id', 'c.name')
             ->getQuery()
             ->getArrayResult();
     }
 
-    public function findByName(string $name): ?Category
-    {
-        return $this->entityManager->getRepository(Category::class)->findBy(['name' => $name])[0] ?? null;
-    }
-
     public function getAllKeyedByName(): array
     {
-        $categories  = $this->entityManager->getRepository(Category::class)->findAll();
-        $categoryMap = [];
+        $categories = $this->entityManager->getRepository(Category::class)->findAll();
+        $categoriesMap = [];
 
         foreach ($categories as $category) {
-            $categoryMap[strtolower($category->getName())] = $category;
+            $categoriesMap[strtolower($category->getName())] = $category;
         }
 
-        return $categoryMap;
+        return $categoriesMap;
     }
 
     public function getTopSpendingCategories(int $limit): array
     {
-        $query = $this->entityManager->createQuery(
-            'SELECT c.name, SUM(ABS(t.amount)) as total
-             FROM App\Entity\Transaction t
-             JOIN t.category c
-             WHERE t.amount < 0
-             GROUP BY c.id
-             ORDER BY total DESC'
-        );
-
-        $query->setMaxResults($limit);
-
-        return $query->getArrayResult();
+        return $this->entityManager
+            ->getRepository(Transaction::class)
+            ->createQueryBuilder('t')
+            ->select('t', 'c')
+            ->leftJoin('t.category', 'c')
+            ->select('c.name as name', 'SUM(ABS(t.amount)) as total')
+            ->groupBy('c.name')
+            ->where('t.amount < 0')
+            ->orderBy('total', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
     }
 }

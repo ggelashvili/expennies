@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Contracts;
 
@@ -15,7 +15,7 @@ interface AuthInterface
 
     public function checkCredentials(UserInterface $user, array $credentials): bool;
 
-    public function logOut(): void;
+    public function logout(): void;
 
     public function register(RegisterUserData $data): UserInterface;
 

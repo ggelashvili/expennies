@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -19,17 +19,20 @@ class RegisterUserRequestValidator implements RequestValidatorInterface
     public function validate(array $data): array
     {
         $v = new Validator($data);
-
-        $v->rule('required', ['name', 'email', 'password', 'confirmPassword'])->message('Required field');
+        $v->rule('required', ['name', 'email', 'password', 'confirmPassword'])->message('Required field');;
         $v->rule('email', 'email');
-        $v->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
+        $v->rule('equals', 'password', 'confirmPassword');
         $v->rule(
-            fn($field, $value, $params, $fields) => ! $this->entityManager->getRepository(User::class)->count(
-                ['email' => $value]
-            ),
+            fn ($field, $value, $params, $fields) =>
+            ! $this->entityManager->getRepository(User::class)->findBy([$field => $value]),
             'email'
-        )->message('User with the given email address already exists');
-
+        )->message('User with given email already exists.');
+        $v->labels(array(
+            'name' => 'Name',
+            'email' => 'Email address',
+            'password' => 'Password',
+            'confirmPassword' => 'Confirm Password',
+        ));
         if (! $v->validate()) {
             throw new ValidationException($v->errors());
         }

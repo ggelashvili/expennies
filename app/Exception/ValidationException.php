@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Exception;
 
@@ -10,7 +10,7 @@ class ValidationException extends \RuntimeException
 {
     public function __construct(
         public readonly array $errors,
-        string $message = 'Validation Error(s)',
+        string $message = "Validation Error(s)",
         int $code = 422,
         ?Throwable $previous = null
     ) {

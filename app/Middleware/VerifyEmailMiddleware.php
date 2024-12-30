@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Middleware;
 
@@ -12,10 +12,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class VerifyEmailMiddleware implements MiddlewareInterface
 {
-    public function __construct(private readonly ResponseFactoryInterface $responseFactory)
-    {
+    public function __construct(
+        private readonly ResponseFactoryInterface $responseFactory,
+    ) {
     }
-
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $user = $request->getAttribute('user');

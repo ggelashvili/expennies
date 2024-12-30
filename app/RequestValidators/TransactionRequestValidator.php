@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\RequestValidators;
 
@@ -11,7 +11,7 @@ use Valitron\Validator;
 
 class TransactionRequestValidator implements RequestValidatorInterface
 {
-    public function __construct(protected readonly CategoryService $categoryService)
+    public function __construct(private readonly CategoryService $categoryService)
     {
     }
 
@@ -19,9 +19,9 @@ class TransactionRequestValidator implements RequestValidatorInterface
     {
         $v = new Validator($data);
 
-        $v->rule('required', ['description', 'amount', 'date', 'category'])->message('Required field');
+        $v->rule('required', ['description', 'amount', 'date', 'category'])->message('Required field');;
         $v->rule('lengthMax', 'description', 255);
-        $v->rule('dateFormat', 'dateFormat', 'm/d/Y g:i A');
+        $v->rule('dateFormat', 'dateFormat', 'd.m.Y H:i:s');
         $v->rule('numeric', 'amount');
         $v->rule('integer', 'category');
         $v->rule(
